@@ -1,2763 +1,2073 @@
---!nonstrict
--- amitoofast hub (lite) - same features as the full hub with the status paragraphs and
--- the one-click Start button removed. Controls only.
---
---   loadstring(game:HttpGet("<raw url>/Main.lua"))()
---
--- Status text now goes nowhere on screen; the underlying state variables are
--- still updated, so console prints or a paragraph can be re-added later.
-
-local Players           = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService        = game:GetService("RunService")
-local Workspace         = game:GetService("Workspace")
-
-local LocalPlayer = Players.LocalPlayer
-local os_clock    = os.clock
-
--- Calling into the game's own ModuleScripts drops this thread's capabilities,
--- after which Fluent's theme code fails with
---   "cannot access 'Instance' (lacking capability Plugin)".
--- Restore identity before touching the UI again. Name varies by executor.
-local function raiseIdentity()
-	local setter = (typeof(setthreadidentity) == "function" and setthreadidentity)
-		or (typeof(setidentity) == "function" and setidentity)
-		or (typeof(syn) == "table" and syn.set_thread_identity)
-		or (typeof(set_thread_identity) == "function" and set_thread_identity)
-
-	if setter then
-		pcall(setter, 8)
-	end
+local _0x002d           = _0x0014:_0x002e(string.char(80, 108, 97, 121, 101, 114, 115))
+local _0x002f = _0x0014:_0x002e(string.char(82, 101, 112, 108, 105, 99, 97, 116, 101, 100, 83, 116, 111, 114, 97, 103, 101))
+local _0x0030        = _0x0014:_0x002e(string.char(82, 117, 110, 83, 101, 114, 118, 105, 99, 101))
+local _0x0031         = _0x0014:_0x002e(string.char(87, 111, 114, 107, 115, 112, 97, 99, 101))
+local _0x0032 = _0x002d._0x0032
+local _0x0033    = os._0x0034
+local function _0x004a()
+local _0x004b = (_0x004c(_0x004d) == string.char(102, 117, 110, 99, 116, 105, 111, 110) and _0x004d)
+or (_0x004c(_0x004e) == string.char(102, 117, 110, 99, 116, 105, 111, 110) and _0x004e)
+or (_0x004c(_0x004f) == string.char(116, 97, 98, 108, 101) and _0x004f._0x0050)
+or (_0x004c(_0x0050) == string.char(102, 117, 110, 99, 116, 105, 111, 110) and _0x0050)
+if _0x004b then
+pcall(_0x004b, (64 - 56))
 end
-
-raiseIdentity()
-
--- Fluent -----------------------------------------------------------------------
-
-local okFluent, Fluent = pcall(function()
-	return loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+end
+_0x004a()
+local _0x0051, _0x003c = pcall(function()
+return _0x0013(_0x0014:_0x0015(string.char(104, 116, 116, 112, 115, 58, 47, 47, 103, 105, 116, 104, 117, 98, 46, 99, 111, 109, 47, 100, 97, 119, 105, 100, 45, 115, 99, 114, 105, 112, 116, 115, 47, 70, 108, 117, 101, 110, 116, 47, 114, 101, 108, 101, 97, 115, 101, 115, 47, 108, 97, 116, 101, 115, 116, 47, 100, 111, 119, 110, 108, 111, 97, 100, 47, 109, 97, 105, 110, 46, 108, 117, 97)))()
 end)
-
-if not okFluent or Fluent == nil then
-	warn("[hub] couldn't load Fluent: " .. tostring(Fluent))
-	return
+if not _0x0051 or _0x003c == nil then
+_0x0052(string.char(91, 104, 117, 98, 93, 32, 99, 111, 117, 108, 100, 110, 39, 116, 32, 108, 111, 97, 100, 32, 70, 108, 117, 101, 110, 116, 58, 32) .. tostring(_0x003c))
+return
 end
-
-local _, SaveManager = pcall(function()
-	return loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local _0x0053, _0x0054 = pcall(function()
+return _0x0013(_0x0014:_0x0015(string.char(104, 116, 116, 112, 115, 58, 47, 47, 114, 97, 119, 46, 103, 105, 116, 104, 117, 98, 117, 115, 101, 114, 99, 111, 110, 116, 101, 110, 116, 46, 99, 111, 109, 47, 100, 97, 119, 105, 100, 45, 115, 99, 114, 105, 112, 116, 115, 47, 70, 108, 117, 101, 110, 116, 47, 109, 97, 115, 116, 101, 114, 47, 65, 100, 100, 111, 110, 115, 47, 83, 97, 118, 101, 77, 97, 110, 97, 103, 101, 114, 46, 108, 117, 97)))()
 end)
-
-local _, InterfaceManager = pcall(function()
-	return loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local _0x0053, _0x0055 = pcall(function()
+return _0x0013(_0x0014:_0x0015(string.char(104, 116, 116, 112, 115, 58, 47, 47, 114, 97, 119, 46, 103, 105, 116, 104, 117, 98, 117, 115, 101, 114, 99, 111, 110, 116, 101, 110, 116, 46, 99, 111, 109, 47, 100, 97, 119, 105, 100, 45, 115, 99, 114, 105, 112, 116, 115, 47, 70, 108, 117, 101, 110, 116, 47, 109, 97, 115, 116, 101, 114, 47, 65, 100, 100, 111, 110, 115, 47, 73, 110, 116, 101, 114, 102, 97, 99, 101, 77, 97, 110, 97, 103, 101, 114, 46, 108, 117, 97)))()
 end)
-
--- Game modules (all optional; each feature degrades on its own) ------------------
-
-local function tryRequire(...)
-	local node = ReplicatedStorage
-	for _, name in { ... } do
-		node = node and node:FindFirstChild(name)
-	end
-	if node == nil then
-		return nil
-	end
-	local ok, mod = pcall(require, node)
-	return ok and mod or nil
+local function _0x005f(...)
+local _0x0060 = _0x002f
+for _0x0053, _0x0061 in { ... } do
+_0x0060 = _0x0060 and _0x0060:_0x0062(_0x0061)
 end
-
-local Checker                 = tryRequire("CAM", "Global", "Checker")
-local Combat_presets          = tryRequire("CAM", "Global", "Combat_presets")
-local Character_info_provider = tryRequire("CAM", "Global", "Character_info_provider")
-local Items                   = tryRequire("CAM", "Global", "Collectibles", "Items")
-local Utility                 = tryRequire("CAM", "Global", "Utility")
-local QuestsModule            = tryRequire("CAM", "Global", "Subsets", "Gameplay", "Quests")
-local DialogueModule          = tryRequire("CAM", "Client", "Modules", "GamePlay", "Dialogue")
-
-local CAM        = ReplicatedStorage:FindFirstChild("CAM")
-local CurPower   = CAM and CAM.Client.Controllers.Skills_Provider:FindFirstChild("CurPower")
-local Animations = ReplicatedStorage:FindFirstChild("Assets")
-	and ReplicatedStorage.Assets:FindFirstChild("Animations")
-
-local Event = ReplicatedStorage
-	:WaitForChild("Communication")
-	:WaitForChild("ServerAndClient")
-	:WaitForChild("Signals")
-	:WaitForChild("SignalEvent")
-	:WaitForChild("Event")
-
---------------------------------------------------------------------------------
--- COMBAT
---------------------------------------------------------------------------------
-
--- Defined in the BEHIND section below; forward-declared so the combat loop
--- can refuse to swing when nothing is actually there.
-local targetValid
-
--- Set by the BEHIND heartbeat, read by the combat loop: true while the current
--- target is blocking. Hitting into a block feeds their block meter, so back off
--- instead.
-local targetShielded = false
-local avoidShield    = true
-local avoidDistance  = 10
-
--- Set when the humanoid loses health; while it holds we reposition instead of
--- standing in the same spot trading hits.
-local dodgeOnHit   = true
-local dodgeStuds   = 12
-local dodgeTime    = 1.0
-local dodgeUntil   = 0
-local dodgeAngle   = 0
-
-local playerScripts = LocalPlayer:WaitForChild("PlayerScripts", 15)
-local CU            = playerScripts and playerScripts:WaitForChild("CU", 10)
-local combatScript  = CU and CU:FindFirstChild("Combat")
-
-local ComboValue = combatScript and combatScript:FindFirstChild("ComboValue")
-
--- Route 1: the game's own punch(), a global in CU.Combat's environment.
--- Route 2: Main_Combat_Script_Client.Do via require - full anims/effects.
--- Route 3: raw FireServer - wire-identical but no client-side effects.
-local punch, Do
-
-if combatScript ~= nil then
-	if typeof(getsenv) == "function" then
-		local ok, env = pcall(getsenv, combatScript)
-		if ok and type(env) == "table" and type(rawget(env, "punch")) == "function" then
-			punch = rawget(env, "punch")
-		end
-	end
-
-	local module = combatScript:FindFirstChild("Main_Combat_Script_Client")
-	if module ~= nil then
-		local ok, mod = pcall(require, module)
-		if ok and type(mod) == "table" and type(mod.Do) == "function" then
-			Do = mod.Do
-		end
-	end
+if _0x0060 == nil then
+return nil
 end
-
-local combatRoute = punch and 1 or Do and 2 or 3
-local combatRouteName = combatRoute == 1 and "punch() via getsenv"
-	or combatRoute == 2 and "Do() via require"
-	or "raw FireServer"
-
-local function getEquippedCombat()
-	if LocalPlayer.Character == nil or Animations == nil then
-		return nil
-	end
-
-	if CurPower ~= nil then
-		for _, power in ipairs(string.split(CurPower.Value, ",")) do
-			if Animations:FindFirstChild(power .. "_Combat_Anims") then
-				return power
-			end
-		end
-	end
-
-	if Character_info_provider ~= nil then
-		local ok, tool = pcall(Character_info_provider.Get_equipped_tool, LocalPlayer)
-		if ok and tool ~= nil then
-			local item = Items and Items[tool.Name]
-			if (item ~= nil and item.HasCombat) or Animations:FindFirstChild(tool.Name .. "_Combat_Anims") then
-				return tool.Name
-			end
-		end
-	end
-
-	return nil
+local _0x0063, _0x0064 = pcall(require, _0x0060)
+return _0x0063 and _0x0064 or nil
 end
-
--- Tool_Accessories under the character mirrors what is ACTUALLY equipped,
--- and the model name is a Combat_presets key directly ("Regular Katana"),
--- skipping the Items[x].CombatPreset indirection. The folder carries a second
--- "<name>Sheathed1" model for the sheath, which is not a preset.
--- Empty folder = unarmed = the "Combat" preset.
-local function presetFromTools()
-	if Combat_presets == nil then
-		return nil
-	end
-
-	local humanoids = Workspace:FindFirstChild("Humanoids")
-	local char = (humanoids and humanoids:FindFirstChild(LocalPlayer.Name)) or LocalPlayer.Character
-	local tools = char and char:FindFirstChild("Tool_Accessories")
-	if tools == nil then
-		return nil
-	end
-
-	local kids = tools:GetChildren()
-	if #kids == 0 then
-		-- nothing held: unarmed preset
-		return Combat_presets.Presets["Combat"] and "Combat" or nil
-	end
-
-	for _, model in kids do
-		local name = model.Name
-		if not string.find(name, "Sheathed") and Combat_presets.Presets[name] then
-			return name
-		end
-	end
-
-	-- held something unrecognised; strip a trailing Sheathed<n> and retry
-	for _, model in kids do
-		local bare = string.gsub(model.Name, "Sheathed%d*$", "")
-		if Combat_presets.Presets[bare] then
-			return bare
-		end
-	end
-
-	return nil
+local _0x0065                 = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(67, 104, 101, 99, 107, 101, 114))
+local _0x0066          = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(67, 111, 109, 98, 97, 116, 95, 112, 114, 101, 115, 101, 116, 115))
+local _0x0067 = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(67, 104, 97, 114, 97, 99, 116, 101, 114, 95, 105, 110, 102, 111, 95, 112, 114, 111, 118, 105, 100, 101, 114))
+local _0x0068                   = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(67, 111, 108, 108, 101, 99, 116, 105, 98, 108, 101, 115), string.char(73, 116, 101, 109, 115))
+local _0x0069                 = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(85, 116, 105, 108, 105, 116, 121))
+local _0x006a            = _0x005f(string.char(67, 65, 77), string.char(71, 108, 111, 98, 97, 108), string.char(83, 117, 98, 115, 101, 116, 115), string.char(71, 97, 109, 101, 112, 108, 97, 121), string.char(81, 117, 101, 115, 116, 115))
+local _0x006b          = _0x005f(string.char(67, 65, 77), string.char(67, 108, 105, 101, 110, 116), string.char(77, 111, 100, 117, 108, 101, 115), string.char(71, 97, 109, 101, 80, 108, 97, 121), string.char(68, 105, 97, 108, 111, 103, 117, 101))
+local _0x006c        = _0x002f:_0x0062(string.char(67, 65, 77))
+local _0x006d   = _0x006c and _0x006c._0x006e._0x006f._0x0070:_0x0062(string.char(67, 117, 114, 80, 111, 119, 101, 114))
+local _0x0071 = _0x002f:_0x0062(string.char(65, 115, 115, 101, 116, 115))
+and _0x002f._0x0072:_0x0062(string.char(65, 110, 105, 109, 97, 116, 105, 111, 110, 115))
+local _0x0073 = _0x002f
+:_0x0074(string.char(67, 111, 109, 109, 117, 110, 105, 99, 97, 116, 105, 111, 110))
+:_0x0074(string.char(83, 101, 114, 118, 101, 114, 65, 110, 100, 67, 108, 105, 101, 110, 116))
+:_0x0074(string.char(83, 105, 103, 110, 97, 108, 115))
+:_0x0074(string.char(83, 105, 103, 110, 97, 108, 69, 118, 101, 110, 116))
+:_0x0074(string.char(69, 118, 101, 110, 116))
+local _0x0086
+local _0x0095 = false
+local _0x0096    = true
+local _0x0097  = (20 / 2)
+local _0x00a4   = true
+local _0x00a5   = 12
+local _0x00a6    = 1.0
+local _0x00a7   = 0
+local _0x00a8   = 0
+local _0x00a9 = _0x0032:_0x0074(string.char(80, 108, 97, 121, 101, 114, 83, 99, 114, 105, 112, 116, 115), (7 + 8))
+local _0x00aa            = _0x00a9 and _0x00a9:_0x0074(string.char(67, 85), 10)
+local _0x00ab  = _0x00aa and _0x00aa:_0x0062(string.char(67, 111, 109, 98, 97, 116))
+local _0x00ac = _0x00ab and _0x00ab:_0x0062(string.char(67, 111, 109, 98, 111, 86, 97, 108, 117, 101))
+local _0x00bc, _0x00b0
+if _0x00ab ~= nil then
+if _0x004c(_0x00bd) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+local _0x0063, _0x00be = pcall(_0x00bd, _0x00ab)
+if _0x0063 and type(_0x00be) == string.char(116, 97, 98, 108, 101) and type(rawget(_0x00be, string.char(112, 117, 110, 99, 104))) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+_0x00bc = rawget(_0x00be, string.char(112, 117, 110, 99, 104))
 end
-
--- Returns preset, presetName (remote arg 2), powerName.
-local function resolvePreset()
-	if Combat_presets == nil then
-		return nil
-	end
-
-	-- Tool_Accessories is the most direct signal; fall back to the game's own
-	-- CurPower / equipped-tool chain when it tells us nothing.
-	local fromTools = presetFromTools()
-	if fromTools ~= nil then
-		return Combat_presets.Presets[fromTools], fromTools, nil
-	end
-
-	local equipped = getEquippedCombat()
-	if equipped == nil then
-		return nil
-	end
-
-	local preset = Combat_presets.Presets[equipped]
-	if preset ~= nil then
-		return preset, equipped, nil
-	end
-
-	local item = Items and Items[equipped]
-	local presetName, powerName
-	if item == nil or (item.Breathing == nil and not item.HasCombat and item.CombatPreset == nil) then
-		presetName, powerName = equipped, nil
-	else
-		presetName, powerName = item.CombatPreset or "Regular Katana", equipped
-	end
-
-	return Combat_presets.Presets[presetName], presetName, powerName
 end
-
-local lastPunch, lastCombovalue = 0, 0
-local combatStatus = "off"
-
--- punch(): v9 = default, or final ONLY when `u4 >= Max and ComboValue < Max`.
--- Both halves matter - dropping the first charges the 1.65s recovery after
--- every hit instead of only after the finisher.
-local function gapFor(preset)
-	local max = preset.Max or 5
-	local wait = preset.default or 0.25
-	local current = ComboValue and ComboValue.Value or 1
-	if lastCombovalue >= max and current < max then
-		wait = preset.final or wait
-	end
-	return wait
+local _0x00bf = _0x00ab:_0x0062(string.char(77, 97, 105, 110, 95, 67, 111, 109, 98, 97, 116, 95, 83, 99, 114, 105, 112, 116, 95, 67, 108, 105, 101, 110, 116))
+if _0x00bf ~= nil then
+local _0x0063, _0x0064 = pcall(require, _0x00bf)
+if _0x0063 and type(_0x0064) == string.char(116, 97, 98, 108, 101) and type(_0x0064._0x00b0) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+_0x00b0 = _0x0064._0x00b0
 end
-
-local function combatStep()
-	local preset, presetName, powerName = resolvePreset()
-	if preset == nil or presetName == nil then
-		combatStatus = "no combat equipped"
-		return nil
-	end
-	if ComboValue == nil then
-		combatStatus = "no ComboValue - is CU.Combat running?"
-		return nil
-	end
-
-	local gap = gapFor(preset)
-	local since = os_clock() - lastPunch
-	if gap >= since then
-		combatStatus = string.format("cooling down (%.2fs)", gap - since)
-		return gap - since
-	end
-
-	if Checker ~= nil and Checker.check(LocalPlayer, "combat") ~= true then
-		combatStatus = "blocked by Checker (stun / ragdoll / cutscene)"
-		return nil
-	end
-
-	local max = preset.Max or 5
-	local value = ComboValue.Value
-
-	if combatRoute == 2 then
-		local ok, result = pcall(Do, ComboValue, preset, presetName, powerName)
-		if not ok then
-			return nil
-		end
-		lastCombovalue = (type(result) == "table" and result.combovalue) or value
-	else
-		local beforeSwing = (preset.delay_before_swing and preset.delay_before_swing[value])
-			or preset.default_before_swing
-			or (Combat_presets and Combat_presets.Default_Swing_Wait)
-			or 0
-		local beforeHit = (preset.delay_before_hit and preset.delay_before_hit[value])
-			or preset.default_before_hit
-			or beforeSwing
-
-		local mult = 1
-		if Combat_presets and type(Combat_presets.attackSpeedMult) == "function" then
-			local okMult, m = pcall(Combat_presets.attackSpeedMult, LocalPlayer)
-			if okMult and type(m) == "number" and m > 0 then
-				mult = m
-			end
-		end
-
-		Event:FireServer("Combat_Service", presetName, value, false,
-			(beforeHit - beforeSwing) / mult, false, nil)
-
-		lastCombovalue = value
-	end
-
-	if Combat_presets then
-		Combat_presets.Last_Combo = value
-	end
-	ComboValue.Value = (value == max or value == 7) and 1 or value + 1
-	lastPunch = os_clock()
-	combatStatus = string.format("punching %s combo %d/%d", presetName, value, max)
-
-	return gapFor(preset)
 end
-
-local autoPunch = false
-
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-
-		if autoPunch and dodgeOnHit and os_clock() < dodgeUntil then
-			combatStatus = "took a hit - repositioning"
-			task.wait(0.1)
-		elseif autoPunch and avoidShield and targetShielded then
-			-- Backing off is handled by the heartbeat; just stop swinging.
-			combatStatus = "target is blocking - holding off"
-			task.wait(0.2)
-		elseif autoPunch and behindOn and not targetValid() then
-			-- Auto Farm is on but nothing selected is in the map. Swinging at
-			-- air just spams the remote, so wait for a target instead.
-			combatStatus = "waiting - no selected NPC nearby"
-			task.wait(0.25)
-		elseif autoPunch then
-			local ok, wait
-			if combatRoute == 1 then
-				ok, wait = pcall(punch)
-				-- punch() reports no reason, only its next delay.
-				if not ok then
-					combatStatus = "punch() errored: " .. tostring(wait)
-				elseif wait == nil then
-					combatStatus = "punch() refused (nothing equipped, or Checker)"
-				else
-					combatStatus = string.format("punching (next in %.2fs)", wait)
-				end
-			else
-				ok, wait = pcall(combatStep)
-				if not ok then
-					combatStatus = "error: " .. tostring(wait)
-				end
-			end
-			task.wait((ok and wait) or 0.25)
-		else
-			combatStatus = "off"
-			task.wait(0.1)
-		end
-	end
+end
+local _0x00c0 = _0x00bc and 1 or _0x00b0 and 2 or 3
+local _0x00c1 = _0x00c0 == 1 and string.char(112, 117, 110, 99, 104, 40, 41, 32, 118, 105, 97, 32, 103, 101, 116, 115, 101, 110, 118)
+or _0x00c0 == 2 and string.char(68, 111, 40, 41, 32, 118, 105, 97, 32, 114, 101, 113, 117, 105, 114, 101)
+or string.char(114, 97, 119, 32, 70, 105, 114, 101, 83, 101, 114, 118, 101, 114)
+local function _0x00c2()
+if _0x0032._0x00c3 == nil or _0x0071 == nil then
+return nil
+end
+if _0x006d ~= nil then
+for _0x0053, _0x00c4 in ipairs(string._0x00c5(_0x006d._0x00c6, string.char(44))) do
+if _0x0071:_0x0062(_0x00c4 .. string.char(95, 67, 111, 109, 98, 97, 116, 95, 65, 110, 105, 109, 115)) then
+return _0x00c4
+end
+end
+end
+if _0x0067 ~= nil then
+local _0x0063, _0x00c7 = pcall(_0x0067._0x00c8, _0x0032)
+if _0x0063 and _0x00c7 ~= nil then
+local _0x00c9 = _0x0068 and _0x0068[_0x00c7._0x0046]
+if (_0x00c9 ~= nil and _0x00c9._0x00ca) or _0x0071:_0x0062(_0x00c7._0x0046 .. string.char(95, 67, 111, 109, 98, 97, 116, 95, 65, 110, 105, 109, 115)) then
+return _0x00c7._0x0046
+end
+end
+end
+return nil
+end
+local function _0x00e1()
+if _0x0066 == nil then
+return nil
+end
+local _0x00e2 = _0x0031:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 115))
+local char = (_0x00e2 and _0x00e2:_0x0062(_0x0032._0x0046)) or _0x0032._0x00c3
+local _0x00e3 = char and char:_0x0062(string.char(84, 111, 111, 108, 95, 65, 99, 99, 101, 115, 115, 111, 114, 105, 101, 115))
+if _0x00e3 == nil then
+return nil
+end
+local _0x00e4 = _0x00e3:_0x00e5()
+if #_0x00e4 == 0 then
+return _0x0066._0x00e7[string.char(67, 111, 109, 98, 97, 116)] and string.char(67, 111, 109, 98, 97, 116) or nil
+end
+for _0x0053, _0x00d2 in _0x00e4 do
+local _0x0061 = _0x00d2._0x0046
+if not string.find(_0x0061, string.char(83, 104, 101, 97, 116, 104, 101, 100)) and _0x0066._0x00e7[_0x0061] then
+return _0x0061
+end
+end
+for _0x0053, _0x00d2 in _0x00e4 do
+local _0x00ef = string.gsub(_0x00d2._0x0046, string.char(83, 104, 101, 97, 116, 104, 101, 100, 37, 100, 42, 36), "")
+if _0x0066._0x00e7[_0x00ef] then
+return _0x00ef
+end
+end
+return nil
+end
+local function _0x00f5()
+if _0x0066 == nil then
+return nil
+end
+local _0x00fd = _0x00e1()
+if _0x00fd ~= nil then
+return _0x0066._0x00e7[_0x00fd], _0x00fd, nil
+end
+local _0x00d1 = _0x00c2()
+if _0x00d1 == nil then
+return nil
+end
+local _0x00de = _0x0066._0x00e7[_0x00d1]
+if _0x00de ~= nil then
+return _0x00de, _0x00d1, nil
+end
+local _0x00c9 = _0x0068 and _0x0068[_0x00d1]
+local _0x00f1, _0x00f4
+if _0x00c9 == nil or (_0x00c9._0x00fe == nil and not _0x00c9._0x00ca and _0x00c9._0x00d7 == nil) then
+_0x00f1, _0x00f4 = _0x00d1, nil
+else
+_0x00f1, _0x00f4 = _0x00c9._0x00d7 or string.char(82, 101, 103, 117, 108, 97, 114, 32, 75, 97, 116, 97, 110, 97), _0x00d1
+end
+return _0x0066._0x00e7[_0x00f1], _0x00f1, _0x00f4
+end
+local _0x00ff, _0x0100 = 0, 0
+local _0x0101 = string.char(111, 102, 102)
+local function _0x0112(_0x00de)
+local max = _0x00de._0x0107 or 5
+local _0x0113 = _0x00de._0x0103 or 0.25
+local _0x008a = _0x00ac and _0x00ac._0x00c6 or 1
+if _0x0100 >= max and _0x008a < max then
+_0x0113 = _0x00de._0x0104 or _0x0113
+end
+return _0x0113
+end
+local function _0x0114()
+local _0x00de, _0x00f1, _0x00f4 = _0x00f5()
+if _0x00de == nil or _0x00f1 == nil then
+_0x0101 = string.char(110, 111, 32, 99, 111, 109, 98, 97, 116, 32, 101, 113, 117, 105, 112, 112, 101, 100)
+return nil
+end
+if _0x00ac == nil then
+_0x0101 = string.char(110, 111, 32, 67, 111, 109, 98, 111, 86, 97, 108, 117, 101, 32, 45, 32, 105, 115, 32, 67, 85, 46, 67, 111, 109, 98, 97, 116, 32, 114, 117, 110, 110, 105, 110, 103, 63)
+return nil
+end
+local _0x0115 = _0x0112(_0x00de)
+local _0x0116 = _0x0033() - _0x00ff
+if _0x0115 >= _0x0116 then
+_0x0101 = string.format(string.char(99, 111, 111, 108, 105, 110, 103, 32, 100, 111, 119, 110, 32, 40, 37, 46, 50, 102, 115, 41), _0x0115 - _0x0116)
+return _0x0115 - _0x0116
+end
+if _0x0065 ~= nil and _0x0065._0x0117(_0x0032, string.char(99, 111, 109, 98, 97, 116)) ~= true then
+_0x0101 = string.char(98, 108, 111, 99, 107, 101, 100, 32, 98, 121, 32, 67, 104, 101, 99, 107, 101, 114, 32, 40, 115, 116, 117, 110, 32, 47, 32, 114, 97, 103, 100, 111, 108, 108, 32, 47, 32, 99, 117, 116, 115, 99, 101, 110, 101, 41)
+return nil
+end
+local max = _0x00de._0x0107 or 5
+local _0x0118 = _0x00ac._0x00c6
+if _0x00c0 == 2 then
+local _0x0063, _0x0119 = pcall(_0x00b0, _0x00ac, _0x00de, _0x00f1, _0x00f4)
+if not _0x0063 then
+return nil
+end
+_0x0100 = (type(_0x0119) == string.char(116, 97, 98, 108, 101) and _0x0119._0x011a) or _0x0118
+else
+local _0x011b = (_0x00de._0x011c and _0x00de._0x011c[_0x0118])
+or _0x00de._0x011d
+or (_0x0066 and _0x0066._0x011e)
+or 0
+local _0x011f = (_0x00de._0x0120 and _0x00de._0x0120[_0x0118])
+or _0x00de._0x0121
+or _0x011b
+local _0x0122 = 1
+if _0x0066 and type(_0x0066._0x0123) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+local _0x0124, _0x0125 = pcall(_0x0066._0x0123, _0x0032)
+if _0x0124 and type(_0x0125) == string.char(110, 117, 109, 98, 101, 114) and _0x0125 > 0 then
+_0x0122 = _0x0125
+end
+end
+_0x0073:_0x00b5(string.char(67, 111, 109, 98, 97, 116, 95, 83, 101, 114, 118, 105, 99, 101), _0x00f1, _0x0118, false,
+(_0x011f - _0x011b) / _0x0122, false, nil)
+_0x0100 = _0x0118
+end
+if _0x0066 then
+_0x0066._0x0126 = _0x0118
+end
+_0x00ac._0x00c6 = (_0x0118 == max or _0x0118 == 7) and 1 or _0x0118 + 1
+_0x00ff = _0x0033()
+_0x0101 = string.format(string.char(112, 117, 110, 99, 104, 105, 110, 103, 32, 37, 115, 32, 99, 111, 109, 98, 111, 32, 37, 100, 47, 37, 100), _0x00f1, _0x0118, max)
+return _0x0112(_0x00de)
+end
+local _0x0127 = false
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+if _0x0127 and _0x00a4 and _0x0033() < _0x00a7 then
+_0x0101 = string.char(116, 111, 111, 107, 32, 97, 32, 104, 105, 116, 32, 45, 32, 114, 101, 112, 111, 115, 105, 116, 105, 111, 110, 105, 110, 103)
+_0x0128._0x0113(0.1)
+elseif _0x0127 and _0x0096 and _0x0095 then
+_0x0101 = string.char(116, 97, 114, 103, 101, 116, 32, 105, 115, 32, 98, 108, 111, 99, 107, 105, 110, 103, 32, 45, 32, 104, 111, 108, 100, 105, 110, 103, 32, 111, 102, 102)
+_0x0128._0x0113(0.2)
+elseif _0x0127 and _0x0130 and not _0x0086() then
+_0x0101 = string.char(119, 97, 105, 116, 105, 110, 103, 32, 45, 32, 110, 111, 32, 115, 101, 108, 101, 99, 116, 101, 100, 32, 78, 80, 67, 32, 110, 101, 97, 114, 98, 121)
+_0x0128._0x0113(0.25)
+elseif _0x0127 then
+local _0x0063, _0x0113
+if _0x00c0 == 1 then
+_0x0063, _0x0113 = pcall(_0x00bc)
+if not _0x0063 then
+_0x0101 = string.char(112, 117, 110, 99, 104, 40, 41, 32, 101, 114, 114, 111, 114, 101, 100, 58, 32) .. tostring(_0x0113)
+elseif _0x0113 == nil then
+_0x0101 = string.char(112, 117, 110, 99, 104, 40, 41, 32, 114, 101, 102, 117, 115, 101, 100, 32, 40, 110, 111, 116, 104, 105, 110, 103, 32, 101, 113, 117, 105, 112, 112, 101, 100, 44, 32, 111, 114, 32, 67, 104, 101, 99, 107, 101, 114, 41)
+else
+_0x0101 = string.format(string.char(112, 117, 110, 99, 104, 105, 110, 103, 32, 40, 110, 101, 120, 116, 32, 105, 110, 32, 37, 46, 50, 102, 115, 41), _0x0113)
+end
+else
+_0x0063, _0x0113 = pcall(_0x0114)
+if not _0x0063 then
+_0x0101 = string.char(101, 114, 114, 111, 114, 58, 32) .. tostring(_0x0113)
+end
+end
+_0x0128._0x0113((_0x0063 and _0x0113) or 0.25)
+else
+_0x0101 = string.char(111, 102, 102)
+_0x0128._0x0113(0.1)
+end
+end
 end)
-
---------------------------------------------------------------------------------
--- BEHIND
---------------------------------------------------------------------------------
-
-local behindOn       = false
-local behindDistance = 3.5
-local behindHeight   = 0
--- Set of NPC folder names to hunt, e.g. { Bandit = true }. Empty = anything.
-local behindTargets  = { ["*Civilian*"] = true }
-local behindRegion   = "Windy Peak"
-
-local regions = Workspace:WaitForChild("Humanoids", 15)
-regions = regions and regions:WaitForChild("Regions", 10)
-
-local function regionNames()
-	local names = {}
-	if regions ~= nil then
-		for _, region in regions:GetChildren() do
-			table.insert(names, region.Name)
-		end
-	end
-	table.sort(names)
-	return names
+local _0x0130       = false
+local _0x013c = (10.5 / 3)
+local _0x013d   = 0
+local _0x0145  = { [string.char(42, 67, 105, 118, 105, 108, 105, 97, 110, 42)] = true }
+local _0x0146   = string.char(87, 105, 110, 100, 121, 32, 80, 101, 97, 107)
+local _0x0147 = _0x0031:_0x0074(string.char(72, 117, 109, 97, 110, 111, 105, 100, 115), 15)
+_0x0147 = _0x0147 and _0x0147:_0x0074(string.char(82, 101, 103, 105, 111, 110, 115), 10)
+local function _0x0148()
+local _0x013f = {}
+if _0x0147 ~= nil then
+for _0x0053, _0x0149 in _0x0147:_0x00e5() do
+table.insert(_0x013f, _0x0149._0x0046)
 end
-
-local function activeNpcs()
-	local region = regions and regions:FindFirstChild(behindRegion)
-	return region and region:FindFirstChild("ActiveNpcs") or nil
 end
-
--- Distinct NPC folder names present in the selected region right now.
-local function npcNames()
-	local names, seen = {}, {}
-	local active = activeNpcs()
-
-	if active ~= nil then
-		for _, folder in active:GetChildren() do
-			if folder:IsA("Folder") and not seen[folder.Name] then
-				seen[folder.Name] = true
-				table.insert(names, folder.Name)
-			end
-		end
-	end
-
-	return names
+table.sort(_0x013f)
+return _0x013f
 end
-
-local function myRoot()
-	local character = LocalPlayer.Character
-	local humanoid  = character and character:FindFirstChildOfClass("Humanoid")
-	if humanoid == nil or humanoid.Health <= 0 then
-		return nil
-	end
-	return character:FindFirstChild("HumanoidRootPart")
+local function _0x014a()
+local _0x0149 = _0x0147 and _0x0147:_0x0062(_0x0146)
+return _0x0149 and _0x0149:_0x0062(string.char(65, 99, 116, 105, 118, 101, 78, 112, 99, 115)) or nil
 end
-
--- Each NPC is a Folder holding a Model of the same name. Resolve by name -
--- GetChildren() order shifts as NPCs die and respawn.
-local function pickTarget()
-	local root = myRoot()
-	local active = activeNpcs()
-	if root == nil or active == nil then
-		return nil
-	end
-
-	local best, bestDist, bestRoot
-
-	for _, folder in active:GetChildren() do
-		local wanted = next(behindTargets) == nil or behindTargets[folder.Name]
-
-		if folder:IsA("Folder") and wanted then
-			local model = folder:FindFirstChild(folder.Name)
-			if model ~= nil and model:IsA("Model") then
-				local humanoid = model:FindFirstChildOfClass("Humanoid")
-				local npcRoot  = model:FindFirstChild("HumanoidRootPart")
-				if humanoid ~= nil and npcRoot ~= nil and humanoid.Health > 0 then
-					local dist = (npcRoot.Position - root.Position).Magnitude
-					if bestDist == nil or dist < bestDist then
-						best, bestDist, bestRoot = model, dist, npcRoot
-					end
-				end
-			end
-		end
-	end
-
-	return best, bestRoot
+local function _0x014e()
+local _0x013f, _0x014f = {}, {}
+local _0x0150 = _0x014a()
+if _0x0150 ~= nil then
+for _0x0053, _0x00da in _0x0150:_0x00e5() do
+if _0x00da:_0x0151(string.char(70, 111, 108, 100, 101, 114)) and not _0x014f[_0x00da._0x0046] then
+_0x014f[_0x00da._0x0046] = true
+table.insert(_0x013f, _0x00da._0x0046)
 end
-
-local target, targetRoot
-
-local function hookHumanoid(character)
-	local humanoid = character:WaitForChild("Humanoid", 10)
-	if humanoid == nil then return end
-
-	local last = humanoid.Health
-	humanoid.HealthChanged:Connect(function(health)
-		-- only damage counts; regen must not trigger a dodge
-		if health < last and dodgeOnHit then
-			dodgeUntil = os_clock() + dodgeTime
-			dodgeAngle = math.rad(math.random(90, 270))
-		end
-		last = health
-	end)
 end
-
-LocalPlayer.CharacterAdded:Connect(hookHumanoid)
-if LocalPlayer.Character then
-	task.spawn(hookHumanoid, LocalPlayer.Character)
 end
-
--- A blocking NPC gains an extra Frame under OverHead.Holder. Normally Holder
--- only carries List / NameHolder / AVanityTitle, plus ZHealth once damaged,
--- so a plain "Frame" child is the block indicator.
-local SHIELD_FRAME = "Frame"
-
-local function isShielded(model)
-	if model == nil then
-		return false
-	end
-
-	local overhead = model:FindFirstChild("OverHead", true)
-	local holder = overhead and overhead:FindFirstChild("Holder")
-	-- Presence alone means shielded. Holder normally carries only List /
-	-- NameHolder / AVanityTitle (plus ZHealth once damaged); a child named
-	-- "Frame" is added while blocking and removed afterwards. No Visible
-	-- check - the element existing is the signal.
-	return holder ~= nil and holder:FindFirstChild(SHIELD_FRAME) ~= nil
+return _0x013f
 end
-
-function targetValid()
-	if target == nil or targetRoot == nil then
-		return false
-	end
-	if target.Parent == nil or targetRoot.Parent == nil then
-		return false
-	end
-	local humanoid = target:FindFirstChildOfClass("Humanoid")
-	return humanoid ~= nil and humanoid.Health > 0
+local function _0x0152()
+local _0x00cd = _0x0032._0x00c3
+local _0x0098  = _0x00cd and _0x00cd:_0x0153(string.char(72, 117, 109, 97, 110, 111, 105, 100))
+if _0x0098 == nil or _0x0098._0x0154 <= 0 then
+return nil
 end
-
-RunService.Heartbeat:Connect(function()
-	if not behindOn or Fluent.Unloaded then
-		return
-	end
-
-	local root = myRoot()
-	if root == nil then
-		target, targetRoot = nil, nil
-		targetShielded = false
-		return
-	end
-
-	if not targetValid() then
-		target, targetRoot = pickTarget()
-		if target == nil then
-			targetShielded = false
-			return
-		end
-	end
-
-	-- Back off while they are blocking, rather than standing in the block.
-	targetShielded = avoidShield and isShielded(target) or false
-	local dodging = dodgeOnHit and os_clock() < dodgeUntil
-
-	local distance = behindDistance
-		+ (targetShielded and avoidDistance or 0)
-		+ (dodging and dodgeStuds or 0)
-
-	-- Roblox models face -Z, so +Z is behind them. While dodging, rotate round
-	-- them first so we do not retreat along the line they are swinging on.
-	local base = targetRoot.CFrame
-	if dodging then
-		base = base * CFrame.Angles(0, dodgeAngle, 0)
-	end
-
-	local spot = base * CFrame.new(0, behindHeight, distance)
-	root.CFrame = CFrame.lookAt(spot.Position, targetRoot.Position)
-
-	-- Without this, repeated CFrame sets build up velocity and fling you.
-	root.AssemblyLinearVelocity  = Vector3.zero
-	root.AssemblyAngularVelocity = Vector3.zero
+return _0x00cd:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 82, 111, 111, 116, 80, 97, 114, 116))
+end
+local function _0x015f()
+local _0x0160 = _0x0152()
+local _0x0150 = _0x014a()
+if _0x0160 == nil or _0x0150 == nil then
+return nil
+end
+local _0x0161, _0x0162, _0x0163
+for _0x0053, _0x00da in _0x0150:_0x00e5() do
+local _0x0164 = next(_0x0145) == nil or _0x0145[_0x00da._0x0046]
+if _0x00da:_0x0151(string.char(70, 111, 108, 100, 101, 114)) and _0x0164 then
+local _0x00d2 = _0x00da:_0x0062(_0x00da._0x0046)
+if _0x00d2 ~= nil and _0x00d2:_0x0151(string.char(77, 111, 100, 101, 108)) then
+local _0x0098 = _0x00d2:_0x0153(string.char(72, 117, 109, 97, 110, 111, 105, 100))
+local _0x0165  = _0x00d2:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 82, 111, 111, 116, 80, 97, 114, 116))
+if _0x0098 ~= nil and _0x0165 ~= nil and _0x0098._0x0154 > 0 then
+local _0x0166 = (_0x0165._0x0167 - _0x0160._0x0167)._0x0168
+if _0x0162 == nil or _0x0166 < _0x0162 then
+_0x0161, _0x0162, _0x0163 = _0x00d2, _0x0166, _0x0165
+end
+end
+end
+end
+end
+return _0x0161, _0x0163
+end
+local _0x008b, _0x0169
+local function _0x016a(_0x00cd)
+local _0x0098 = _0x00cd:_0x0074(string.char(72, 117, 109, 97, 110, 111, 105, 100), 10)
+if _0x0098 == nil then return end
+local _0x016b = _0x0098._0x0154
+_0x0098._0x016c:_0x016d(function(_0x009a)
+if _0x009a < _0x016b and _0x00a4 then
+_0x00a7 = _0x0033() + _0x00a6
+_0x00a8 = math.rad(math.random((45 + 45), (135 + 135)))
+end
+_0x016b = _0x009a
 end)
-
---------------------------------------------------------------------------------
--- QUEST
---------------------------------------------------------------------------------
-
-local function questsFolder()
-	if Utility ~= nil and type(Utility.GetData) == "function" then
-		local ok, data = pcall(Utility.GetData, LocalPlayer)
-		if ok and data ~= nil then
-			local quests = data:FindFirstChild("Quests")
-			if quests ~= nil then
-				return quests
-			end
-		end
-	end
-
-	local service = ReplicatedStorage:FindFirstChild("Player_Service")
-	local all     = service and service:FindFirstChild("Data")
-	local mine    = all and all:FindFirstChild(LocalPlayer.Name)
-	local slots   = mine and mine:FindFirstChild("slots")
-
-	if slots ~= nil then
-		for _, slot in slots:GetChildren() do
-			local quests = slot:FindFirstChild("Quests")
-			if quests ~= nil and quests:FindFirstChild("Holder") ~= nil then
-				return quests
-			end
-		end
-	end
 end
-
--- Tasks are Configurations holding Value / Max / Code, per Quests.QuestTask.
-local function questLines()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-
-	if holder == nil then
-		return "no quest data"
-	end
-
-	local parts = {}
-
-	for _, quest in holder:GetChildren() do
-		local bits  = {}
-		local tasks = quest:FindFirstChild("Tasks")
-
-		if tasks ~= nil then
-			for _, t in tasks:GetChildren() do
-				local value = t:FindFirstChild("Value")
-				local max   = t:FindFirstChild("Max")
-				table.insert(bits, ("%s  %d/%d"):format(
-					t.Name,
-					value and value.Value or 0,
-					max and max.Value or 0))
-			end
-		end
-
-		table.insert(parts, ("%s\n%s"):format(quest.Name, table.concat(bits, "\n")))
-	end
-
-	if #parts == 0 then
-		return "no active quests"
-	end
-
-	return table.concat(parts, "\n\n")
+_0x0032._0x0174:_0x016d(_0x016a)
+if _0x0032._0x00c3 then
+_0x0128._0x0129(_0x016a, _0x0032._0x00c3)
 end
-
--- Quests.Holder keys ARE the accept strings - the same value Dialogue passes
--- to the server. 92 of them, most with their level gate in the name.
-local function questKeys()
-	local keys = {}
-	if QuestsModule ~= nil and type(QuestsModule.Holder) == "table" then
-		for k in pairs(QuestsModule.Holder) do
-			table.insert(keys, tostring(k))
-		end
-	end
-	table.sort(keys)
-	return keys
+local _0x0187 = string.char(70, 114, 97, 109, 101)
+local function _0x0188(_0x00d2)
+if _0x00d2 == nil then
+return false
 end
-
-local function activeQuestCount()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-	return holder and #holder:GetChildren() or 0
+local _0x0189 = _0x00d2:_0x0062(string.char(79, 118, 101, 114, 72, 101, 97, 100), true)
+local _0x018a = _0x0189 and _0x0189:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+return _0x018a ~= nil and _0x018a:_0x0062(_0x0187) ~= nil
 end
-
--- LastTime's epoch isn't documented; ignore future or absurdly old readings
--- rather than blocking forever.
-local function questCooldownLeft()
-	local folder = questsFolder()
-	local lastTime = folder and folder:FindFirstChild("LastTime")
-	local cd = (QuestsModule and QuestsModule.QuestCD) or 30
-
-	if lastTime == nil or lastTime.Value <= 0 then
-		return 0
-	end
-
-	local elapsed = os.time() - lastTime.Value
-	if elapsed < 0 or elapsed > 86400 then
-		return 0
-	end
-
-	return math.max(0, cd - elapsed)
+function _0x0086()
+if _0x008b == nil or _0x0169 == nil then
+return false
 end
-
--- Delegates to the game's own AddQuest, which runs the Requirements /
--- WenCostOnAccept / ItemCostOnAccept / CanAddQuest gates and fires the remote
--- itself, returning a reason string on refusal.
-local function acceptQuest(name)
-	local fn = DialogueModule and DialogueModule.Functions and DialogueModule.Functions.AddQuest
-	if type(fn) ~= "function" then
-		return false, "NoAddQuestFunction"
-	end
-
-	local ok, reason = pcall(fn, name)
-	if not ok then
-		return false, tostring(reason)
-	end
-	if reason ~= nil then
-		return false, tostring(reason)
-	end
-	return true
+if _0x008b._0x0196 == nil or _0x0169._0x0196 == nil then
+return false
 end
-
--- Quest givers are static NPCs at
---   Workspace.Debree.Regions.<Region>.StationaryNpcs.<OfferNpc>
--- NOT in ActiveNpcs, which only holds spawned combat NPCs.
-local function findGiver(npcName)
-	if npcName == nil then
-		return nil
-	end
-
-	local debree  = Workspace:FindFirstChild("Debree")
-	local regions = debree and debree:FindFirstChild("Regions")
-	if regions == nil then
-		return nil
-	end
-
-	for _, region in regions:GetChildren() do
-		local folder = region:FindFirstChild("StationaryNpcs")
-		local npc    = folder and folder:FindFirstChild(npcName)
-		if npc ~= nil then
-			local part = npc:IsA("Model") and (npc.PrimaryPart or npc:FindFirstChild("HumanoidRootPart"))
-				or (npc:IsA("BasePart") and npc)
-			if part ~= nil then
-				return part.Position, region.Name
-			end
-		end
-	end
+local _0x0098 = _0x008b:_0x0153(string.char(72, 117, 109, 97, 110, 111, 105, 100))
+return _0x0098 ~= nil and _0x0098._0x0154 > 0
 end
-
-local function questDef(questName)
-	return QuestsModule and type(QuestsModule.Holder) == "table"
-		and QuestsModule.Holder[questName] or nil
+_0x0030._0x0197:_0x016d(function()
+if not _0x0130 or _0x003c._0x012a then
+return
 end
-
--- OfferNpc is the giver's NAME (a string), not a boolean.
-local function questGiverName(questName)
-	local def = questDef(questName)
-	return def ~= nil and type(def.OfferNpc) == "string" and def.OfferNpc or nil
+local _0x0160 = _0x0152()
+if _0x0160 == nil then
+_0x008b, _0x0169 = nil, nil
+_0x0095 = false
+return
 end
-
--- Position is the OBJECTIVE area, not the giver - they differ by ~145 studs
--- for "Ill take 3 bandits". Only 9 of 92 quests carry one.
-local function questObjective(questName)
-	local def = questDef(questName)
-	return def ~= nil and typeof(def.Position) == "Vector3" and def.Position or nil
+if not _0x0086() then
+_0x008b, _0x0169 = _0x015f()
+if _0x008b == nil then
+_0x0095 = false
+return
 end
-
--- Quests in your data are named by DISPLAY name ("Defeat The Bandit Boss"),
--- while Holder is keyed by ACCEPT string ("Ill take the bandit boss(Lv 7)").
--- QuestInstance.Name bridges the two.
-local function acceptKeyFor(displayName)
-	if QuestsModule == nil or type(QuestsModule.Holder) ~= "table" then
-		return nil
-	end
-
-	for key, def in pairs(QuestsModule.Holder) do
-		if key == displayName then
-			return key
-		end
-		local inst = def ~= nil and def.QuestInstance
-		if typeof(inst) == "Instance" and inst.Name == displayName then
-			return key
-		end
-	end
 end
-
--- HARDCODED objective positions, keyed by ACCEPT string.
---
--- Only needed for the 12 quests that carry neither a top-level Position nor
--- any Markers. Everything else resolves from game data below. Add your own as
--- you find them - this table wins over everything.
---
--- Still blank (target unknown): Ill deliver the package (Elara),
--- Ill find the pages, Ill get this letter delivered, Ill look for it(Lv 10),
--- Ill look for the penny(Lv 14), Ill see you to Windy Peak(Lv 105),
--- Ill learn the Reaping Blades/Soryu/Tai Chi Style, Muzan Quest.
-local QUEST_POSITIONS = {
-	-- Village spies are the *Civilian* NPCs scattered through Windy Peak
-	-- village; this is roughly the middle of them.
-	["Ill help clear them out"] = Vector3.new(-607, 1245, -1110),
-
-	-- "Report to Noote" - the objective is the NPC itself.
-	["Ill bring him the notes"] = Vector3.new(-515, 1245, -1251),
+_0x0095 = _0x0096 and _0x0188(_0x008b) or false
+local _0x019c = _0x00a4 and _0x0033() < _0x00a7
+local _0x019d = _0x013c
++ (_0x0095 and _0x0097 or 0)
++ (_0x019c and _0x00a5 or 0)
+local _0x01aa = _0x0169._0x01ab
+if _0x019c then
+_0x01aa = _0x01aa * _0x01ab._0x01ac(0, _0x00a8, 0)
+end
+local _0x00a1 = _0x01aa * _0x01ab._0x01ad(0, _0x013d, _0x019d)
+_0x0160._0x01ab = _0x01ab._0x01ae(_0x00a1._0x0167, _0x0169._0x0167)
+_0x0160._0x01b8  = _0x01b9._0x01ba
+_0x0160._0x01bb = _0x01b9._0x01ba
+end)
+local function _0x01bd()
+if _0x0069 ~= nil and type(_0x0069._0x01be) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+local _0x0063, _0x01bf = pcall(_0x0069._0x01be, _0x0032)
+if _0x0063 and _0x01bf ~= nil then
+local _0x01c0 = _0x01bf:_0x0062(string.char(81, 117, 101, 115, 116, 115))
+if _0x01c0 ~= nil then
+return _0x01c0
+end
+end
+end
+local _0x01c1 = _0x002f:_0x0062(string.char(80, 108, 97, 121, 101, 114, 95, 83, 101, 114, 118, 105, 99, 101))
+local _0x0058     = _0x01c1 and _0x01c1:_0x0062(string.char(68, 97, 116, 97))
+local _0x01c2    = _0x0058 and _0x0058:_0x0062(_0x0032._0x0046)
+local _0x01c3   = _0x01c2 and _0x01c2:_0x0062(string.char(115, 108, 111, 116, 115))
+if _0x01c3 ~= nil then
+for _0x0053, _0x01c4 in _0x01c3:_0x00e5() do
+local _0x01c0 = _0x01c4:_0x0062(string.char(81, 117, 101, 115, 116, 115))
+if _0x01c0 ~= nil and _0x01c0:_0x0062(string.char(72, 111, 108, 100, 101, 114)) ~= nil then
+return _0x01c0
+end
+end
+end
+end
+local function _0x01cb()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+if _0x018a == nil then
+return string.char(110, 111, 32, 113, 117, 101, 115, 116, 32, 100, 97, 116, 97)
+end
+local _0x01cc = {}
+for _0x0053, _0x01cd in _0x018a:_0x00e5() do
+local _0x01ce  = {}
+local _0x01cf = _0x01cd:_0x0062(string.char(84, 97, 115, 107, 115))
+if _0x01cf ~= nil then
+for _0x0053, _0x01d0 in _0x01cf:_0x00e5() do
+local _0x0118 = _0x01d0:_0x0062(string.char(86, 97, 108, 117, 101))
+local max   = _0x01d0:_0x0062(string.char(77, 97, 120))
+table.insert(_0x01ce, (string.char(37, 115, 32, 32, 37, 100, 47, 37, 100)):format(
+_0x01d0._0x0046,
+_0x0118 and _0x0118._0x00c6 or 0,
+max and max._0x00c6 or 0))
+end
+end
+table.insert(_0x01cc, (string.char(37, 115, 10, 37, 115)):format(_0x01cd._0x0046, table.concat(_0x01ce, string.char(10))))
+end
+if #_0x01cc == 0 then
+return string.char(110, 111, 32, 97, 99, 116, 105, 118, 101, 32, 113, 117, 101, 115, 116, 115)
+end
+return table.concat(_0x01cc, string.char(10, 10))
+end
+local function _0x01da()
+local _0x01d1 = {}
+if _0x006a ~= nil and type(_0x006a._0x017b) == string.char(116, 97, 98, 108, 101) then
+for _0x01db in pairs(_0x006a._0x017b) do
+table.insert(_0x01d1, tostring(_0x01db))
+end
+end
+table.sort(_0x01d1)
+return _0x01d1
+end
+local function _0x01dc()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+return _0x018a and #_0x018a:_0x00e5() or 0
+end
+local function _0x01e5()
+local _0x00da = _0x01bd()
+local _0x01e6 = _0x00da and _0x00da:_0x0062(string.char(76, 97, 115, 116, 84, 105, 109, 101))
+local _0x01e7 = (_0x006a and _0x006a._0x01e8) or 30
+if _0x01e6 == nil or _0x01e6._0x00c6 <= 0 then
+return 0
+end
+local _0x01e9 = os._0x01ea() - _0x01e6._0x00c6
+if _0x01e9 < 0 or _0x01e9 > (172800 / 2) then
+return 0
+end
+return math.max(0, _0x01e7 - _0x01e9)
+end
+local function _0x01f7(_0x0061)
+local _0x01f8 = _0x006b and _0x006b._0x01f9 and _0x006b._0x01f9._0x01ec
+if type(_0x01f8) ~= string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+return false, string.char(78, 111, 65, 100, 100, 81, 117, 101, 115, 116, 70, 117, 110, 99, 116, 105, 111, 110)
+end
+local _0x0063, _0x013a = pcall(_0x01f8, _0x0061)
+if not _0x0063 then
+return false, tostring(_0x013a)
+end
+if _0x013a ~= nil then
+return false, tostring(_0x013a)
+end
+return true
+end
+local function _0x0205(_0x0206)
+if _0x0206 == nil then
+return nil
+end
+local _0x0207  = _0x0031:_0x0062(string.char(68, 101, 98, 114, 101, 101))
+local _0x0147 = _0x0207 and _0x0207:_0x0062(string.char(82, 101, 103, 105, 111, 110, 115))
+if _0x0147 == nil then
+return nil
+end
+for _0x0053, _0x0149 in _0x0147:_0x00e5() do
+local _0x00da = _0x0149:_0x0062(string.char(83, 116, 97, 116, 105, 111, 110, 97, 114, 121, 78, 112, 99, 115))
+local _0x0208    = _0x00da and _0x00da:_0x0062(_0x0206)
+if _0x0208 ~= nil then
+local _0x0209 = _0x0208:_0x0151(string.char(77, 111, 100, 101, 108)) and (_0x0208._0x020a or _0x0208:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 82, 111, 111, 116, 80, 97, 114, 116)))
+or (_0x0208:_0x0151(string.char(66, 97, 115, 101, 80, 97, 114, 116)) and _0x0208)
+if _0x0209 ~= nil then
+return _0x0209._0x0167, _0x0149._0x0046
+end
+end
+end
+end
+local function _0x020b(_0x020c)
+return _0x006a and type(_0x006a._0x017b) == string.char(116, 97, 98, 108, 101)
+and _0x006a._0x017b[_0x020c] or nil
+end
+local function _0x0210(_0x020c)
+local _0x0211 = _0x020b(_0x020c)
+return _0x0211 ~= nil and type(_0x0211._0x0201) == string.char(115, 116, 114, 105, 110, 103) and _0x0211._0x0201 or nil
+end
+local function _0x0218(_0x020c)
+local _0x0211 = _0x020b(_0x020c)
+return _0x0211 ~= nil and _0x004c(_0x0211._0x0167) == string.char(86, 101, 99, 116, 111, 114, 51) and _0x0211._0x0167 or nil
+end
+local function _0x0220(_0x0221)
+if _0x006a == nil or type(_0x006a._0x017b) ~= string.char(116, 97, 98, 108, 101) then
+return nil
+end
+for _0x00d3, _0x0211 in pairs(_0x006a._0x017b) do
+if _0x00d3 == _0x0221 then
+return _0x00d3
+end
+local _0x0222 = _0x0211 ~= nil and _0x0211._0x021d
+if _0x004c(_0x0222) == string.char(73, 110, 115, 116, 97, 110, 99, 101) and _0x0222._0x0046 == _0x0221 then
+return _0x00d3
+end
+end
+end
+local _0x024d = {
+[string.char(73, 108, 108, 32, 104, 101, 108, 112, 32, 99, 108, 101, 97, 114, 32, 116, 104, 101, 109, 32, 111, 117, 116)] = _0x01b9._0x01ad(-(689 - 82), (622 + 623), -(555 + 555)),
+[string.char(73, 108, 108, 32, 98, 114, 105, 110, 103, 32, 104, 105, 109, 32, 116, 104, 101, 32, 110, 111, 116, 101, 115)] = _0x01b9._0x01ad(-515, (3735 / 3), -1251),
 }
-
--- Find a named NPC anywhere: spawned combat NPCs first, then static ones.
-local function findNpcAnywhere(npcName)
-	if npcName == nil then
-		return nil
-	end
-
-	local function positionOf(inst)
-		local model = inst:IsA("Model") and inst or inst:FindFirstChild(inst.Name)
-		local part = model and (model.PrimaryPart or model:FindFirstChild("HumanoidRootPart"))
-		return part and part.Position or nil
-	end
-
-	local humanoids = Workspace:FindFirstChild("Humanoids")
-	local regionRoot = humanoids and humanoids:FindFirstChild("Regions")
-	for _, region in (regionRoot and regionRoot:GetChildren() or {}) do
-		local act = region:FindFirstChild("ActiveNpcs")
-		local hit = act and act:FindFirstChild(npcName)
-		if hit then
-			local pos = positionOf(hit)
-			if pos then
-				return pos, region.Name
-			end
-		end
-	end
-
-	local pos, region = findGiver(npcName)
-	return pos, region
+local function _0x0259(_0x0206)
+if _0x0206 == nil then
+return nil
 end
-
--- Markers hold either an explicit Position or an { Npc = "name" } to look up.
-local function markerPosition(acceptKey)
-	local def = questDef(acceptKey)
-	local markers = def ~= nil and def.Markers
-	if type(markers) ~= "table" then
-		return nil
-	end
-
-	-- explicit coordinates win; they need nothing loaded
-	for label, m in pairs(markers) do
-		if type(m) == "table" and typeof(m.Position) == "Vector3" then
-			return m.Position, tostring(label)
-		end
-	end
-
-	for label, m in pairs(markers) do
-		if type(m) == "table" and type(m.Npc) == "string" then
-			local pos = findNpcAnywhere(m.Npc)
-			if pos ~= nil then
-				return pos, tostring(label) .. " (" .. m.Npc .. ")"
-			end
-		end
-	end
-
-	return nil
+local function _0x025a(_0x0222)
+local _0x00d2 = _0x0222:_0x0151(string.char(77, 111, 100, 101, 108)) and _0x0222 or _0x0222:_0x0062(_0x0222._0x0046)
+local _0x0209 = _0x00d2 and (_0x00d2._0x020a or _0x00d2:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 82, 111, 111, 116, 80, 97, 114, 116)))
+return _0x0209 and _0x0209._0x0167 or nil
 end
-
--- Full resolution for one accept key, best source first.
-local function questWaypoint(acceptKey)
-	if acceptKey == nil then
-		return nil
-	end
-
-	local hard = QUEST_POSITIONS[acceptKey]
-	if hard ~= nil then
-		return hard, "hardcoded"
-	end
-
-	local pos = questObjective(acceptKey)
-	if pos ~= nil then
-		return pos, "Position"
-	end
-
-	local mpos, label = markerPosition(acceptKey)
-	if mpos ~= nil then
-		return mpos, "marker: " .. tostring(label)
-	end
-
-	return nil
+local _0x00e2 = _0x0031:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 115))
+local _0x025b = _0x00e2 and _0x00e2:_0x0062(string.char(82, 101, 103, 105, 111, 110, 115))
+for _0x0053, _0x0149 in (_0x025b and _0x025b:_0x00e5() or {}) do
+local _0x025c = _0x0149:_0x0062(string.char(65, 99, 116, 105, 118, 101, 78, 112, 99, 115))
+local _0x0110 = _0x025c and _0x025c:_0x0062(_0x0206)
+if _0x0110 then
+local _0x025d = _0x025a(_0x0110)
+if _0x025d then
+return _0x025d, _0x0149._0x0046
 end
-
--- The objective of the quest you are actually holding, not the dropdown pick.
-local function activeObjective()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-
-	for _, quest in (holder and holder:GetChildren() or {}) do
-		local key = acceptKeyFor(quest.Name)
-		local pos, source = questWaypoint(key)
-		if pos ~= nil then
-			return pos, quest.Name, source
-		end
-	end
 end
-
-local function teleportTo(position)
-	local root = myRoot()
-	if root == nil or position == nil then
-		return false
-	end
-
-	root.CFrame = CFrame.new(position + Vector3.new(0, 3, 4))
-	root.AssemblyLinearVelocity  = Vector3.zero
-	root.AssemblyAngularVelocity = Vector3.zero
-	return true
 end
-
---------------------------------------------------------------------------------
--- QUEST FARM
---------------------------------------------------------------------------------
-
--- A quest task carries a Code ("KaruVillageBandit", "VillageSpy", "Zuko") that
--- kills are credited against. That Code is resolved SERVER-side - it appears
--- nowhere on the NPC in the client's view - so mapping Code to an NPC folder
--- name needs rules rather than a lookup.
---
--- Confirmed pairs: KaruVillageBandit -> Bandit, VillageSpy -> *Civilian*,
--- Zuko -> Zuko.
-local CODE_OVERRIDES = {
-	VillageSpy = { "*Civilian*" },
+local _0x025d, _0x0149 = _0x0205(_0x0206)
+return _0x025d, _0x0149
+end
+local function _0x0262(_0x0263)
+local _0x0211 = _0x020b(_0x0263)
+local _0x0264 = _0x0211 ~= nil and _0x0211._0x022c
+if type(_0x0264) ~= string.char(116, 97, 98, 108, 101) then
+return nil
+end
+for _0x0269, _0x0125 in pairs(_0x0264) do
+if type(_0x0125) == string.char(116, 97, 98, 108, 101) and _0x004c(_0x0125._0x0167) == string.char(86, 101, 99, 116, 111, 114, 51) then
+return _0x0125._0x0167, tostring(_0x0269)
+end
+end
+for _0x0269, _0x0125 in pairs(_0x0264) do
+if type(_0x0125) == string.char(116, 97, 98, 108, 101) and type(_0x0125._0x0261) == string.char(115, 116, 114, 105, 110, 103) then
+local _0x025d = _0x0259(_0x0125._0x0261)
+if _0x025d ~= nil then
+return _0x025d, tostring(_0x0269) .. string.char(32, 40) .. _0x0125._0x0261 .. string.char(41)
+end
+end
+end
+return nil
+end
+local function _0x026d(_0x0263)
+if _0x0263 == nil then
+return nil
+end
+local _0x026e = _0x024d[_0x0263]
+if _0x026e ~= nil then
+return _0x026e, string.char(104, 97, 114, 100, 99, 111, 100, 101, 100)
+end
+local _0x025d = _0x0218(_0x0263)
+if _0x025d ~= nil then
+return _0x025d, string.char(80, 111, 115, 105, 116, 105, 111, 110)
+end
+local _0x026f, _0x0269 = _0x0262(_0x0263)
+if _0x026f ~= nil then
+return _0x026f, string.char(109, 97, 114, 107, 101, 114, 58, 32) .. tostring(_0x0269)
+end
+return nil
+end
+local function _0x0272()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+for _0x0053, _0x01cd in (_0x018a and _0x018a:_0x00e5() or {}) do
+local _0x00d3 = _0x0220(_0x01cd._0x0046)
+local _0x025d, _0x026c = _0x026d(_0x00d3)
+if _0x025d ~= nil then
+return _0x025d, _0x01cd._0x0046, _0x026c
+end
+end
+end
+local function _0x0273(_0x0274)
+local _0x0160 = _0x0152()
+if _0x0160 == nil or _0x0274 == nil then
+return false
+end
+_0x0160._0x01ab = _0x01ab._0x01ad(_0x0274 + _0x01b9._0x01ad(0, 3, (22 - 18)))
+_0x0160._0x01b8  = _0x01b9._0x01ba
+_0x0160._0x01bb = _0x01b9._0x01ba
+return true
+end
+local _0x0286 = {
+_0x0284 = { string.char(42, 67, 105, 118, 105, 108, 105, 97, 110, 42) },
 }
-
-local questFarm       = false
-local questFarmStatus = "off"
-
--- Master switch: drives every other toggle from one place.
-local autoAll       = false
-local autoAllStatus = "off"
-local autoPickQuest = true
-
--- Weapon state lives up here so the master loop can drive it; the Equip tab
--- assigns the item and slot further down.
-local autoWeapon  = false
-local toolbarItem = nil
-local toolbarSlot = "One"
-local combatQuestsOnly = true
-
--- Accept key of the quest you currently hold (data names it by display name).
-local function activeQuestKey()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-	for _, quest in (holder and holder:GetChildren() or {}) do
-		return acceptKeyFor(quest.Name), quest.Name
-	end
+local _0x0287       = false
+local _0x0288 = string.char(111, 102, 102)
+local _0x028f       = false
+local _0x0290 = string.char(111, 102, 102)
+local _0x0291 = true
+local _0x029c  = false
+local _0x029d = nil
+local _0x029e = string.char(79, 110, 101)
+local _0x029f = true
+local function _0x02a3()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+for _0x0053, _0x01cd in (_0x018a and _0x018a:_0x00e5() or {}) do
+return _0x0220(_0x01cd._0x0046), _0x01cd._0x0046
 end
-
--- Quests worth auto-running, cheapest level first. BossHunt and Muzan are
--- excluded: they are repeatable bounties with no OfferNpc to travel to.
---
--- combatQuestsOnly keeps just Category == "Combat". The rest are things this
--- hub cannot do - Dialogue is fetch/deliver, Fishing needs the minigame - and
--- taking one stalls the loop on an objective it can never finish.
-local questPlanCache, questPlanKey = nil, nil
-
-local function questPlan()
-	local cacheKey = combatQuestsOnly and "combat" or "all"
-	if questPlanCache ~= nil and questPlanKey == cacheKey then
-		return questPlanCache
-	end
-
-	local list = {}
-	if QuestsModule ~= nil and type(QuestsModule.Holder) == "table" then
-		for key, def in pairs(QuestsModule.Holder) do
-			local category = tostring(def.Category or "")
-			local giver = type(def.OfferNpc) == "string" and def.OfferNpc or nil
-			local wanted = category ~= "BossHunt" and category ~= "Muzan"
-				and (not combatQuestsOnly or category == "Combat")
-			if giver ~= nil and wanted then
-				-- level gate is written into the key, e.g. "(Lv 25)"
-				local lvl = tonumber(string.match(key, "%(Lv (%d+)%)")) or 0
-				table.insert(list, { key = key, level = lvl, giver = giver })
-			end
-		end
-	end
-
-	table.sort(list, function(a, b)
-		if a.level ~= b.level then
-			return a.level < b.level
-		end
-		return a.key < b.key
-	end)
-
-	questPlanCache = list
-	questPlanKey = combatQuestsOnly and "combat" or "all"
-	return list
 end
-
--- First quest the game itself says you may accept. CanAddQuest covers the
--- level gate, already-completed, and the max-quests rule, so we do not have to
--- reimplement any of it.
-local function nextEligibleQuest()
-	if QuestsModule == nil or type(QuestsModule.CanAddQuest) ~= "function" then
-		return nil
-	end
-
-	for _, entry in questPlan() do
-		local ok, allowed = pcall(QuestsModule.CanAddQuest, entry.key)
-		if ok and allowed then
-			-- only bother if we can actually reach the giver
-			if findGiver(entry.giver) ~= nil then
-				return entry.key, entry.giver
-			end
-		end
-	end
+local _0x02b9, _0x02ba = nil, nil
+local function _0x02bb()
+local _0x02bc = _0x029f and string.char(99, 111, 109, 98, 97, 116) or string.char(97, 108, 108)
+if _0x02b9 ~= nil and _0x02ba == _0x02bc then
+return _0x02b9
 end
-
--- True when you hold a quest and every task on it is at Max.
-local function allTasksComplete()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-	local any, complete = false, true
-
-	for _, quest in (holder and holder:GetChildren() or {}) do
-		local tasks = quest:FindFirstChild("Tasks")
-		for _, t in (tasks and tasks:GetChildren() or {}) do
-			any = true
-			local v = t:FindFirstChild("Value")
-			local m = t:FindFirstChild("Max")
-			if not (v and m and m.Value > 0 and v.Value >= m.Value) then
-				complete = false
-			end
-		end
-	end
-
-	return any and complete
+local _0x02bd = {}
+if _0x006a ~= nil and type(_0x006a._0x017b) == string.char(116, 97, 98, 108, 101) then
+for _0x00d3, _0x0211 in pairs(_0x006a._0x017b) do
+local _0x02be = tostring(_0x0211._0x02ae or "")
+local _0x020d = type(_0x0211._0x0201) == string.char(115, 116, 114, 105, 110, 103) and _0x0211._0x0201 or nil
+local _0x0164 = _0x02be ~= string.char(66, 111, 115, 115, 72, 117, 110, 116) and _0x02be ~= string.char(77, 117, 122, 97, 110)
+and (not _0x029f or _0x02be == string.char(67, 111, 109, 98, 97, 116))
+if _0x020d ~= nil and _0x0164 then
+local _0x02c0 = tonumber(string.match(_0x00d3, string.char(37, 40, 76, 118, 32, 40, 37, 100, 43, 41, 37, 41))) or 0
+table.insert(_0x02bd, { _0x00d3 = _0x00d3, _0x01d8 = _0x02c0, _0x020d = _0x020d })
 end
-
--- Task Codes for every quest you currently hold.
-local function activeTaskCodes()
-	local folder = questsFolder()
-	local holder = folder and folder:FindFirstChild("Holder")
-	local codes = {}
-
-	for _, quest in (holder and holder:GetChildren() or {}) do
-		local tasks = quest:FindFirstChild("Tasks")
-		for _, t in (tasks and tasks:GetChildren() or {}) do
-			local code  = t:FindFirstChild("Code")
-			local value = t:FindFirstChild("Value")
-			local max   = t:FindFirstChild("Max")
-			local done  = value and max and max.Value > 0 and value.Value >= max.Value
-
-			if code ~= nil and code.Value ~= "" and not done then
-				table.insert(codes, code.Value)
-			end
-		end
-	end
-
-	return codes
 end
-
--- Which NPC folder names in the current region satisfy those Codes.
-local function resolveQuestTargets()
-	local codes = activeTaskCodes()
-	if #codes == 0 then
-		return {}, "no unfinished quest task"
-	end
-
-	local active = activeNpcs()
-	if active == nil then
-		return {}, "region has no ActiveNpcs"
-	end
-
-	local present = {}
-	for _, folder in active:GetChildren() do
-		if folder:IsA("Folder") then
-			present[folder.Name] = true
-		end
-	end
-
-	local picked = {}
-
-	for _, code in codes do
-		local lowerCode = string.lower(code)
-
-		-- 1. exact match (Zuko)
-		if present[code] then
-			picked[code] = true
-		end
-
-		-- 2. explicit override (VillageSpy -> *Civilian*)
-		for _, name in (CODE_OVERRIDES[code] or {}) do
-			if present[name] then
-				picked[name] = true
-			end
-		end
-
-		-- 3. folder name appears inside the Code (Bandit in KaruVillageBandit)
-		for name in pairs(present) do
-			local bare = string.lower((string.gsub(name, "%*", "")))
-			if #bare > 2 and string.find(lowerCode, bare, 1, true) then
-				picked[name] = true
-			end
-		end
-	end
-
-	-- 4. last resort: asterisk-wrapped names are quest-marked variants
-	if next(picked) == nil then
-		for name in pairs(present) do
-			if string.match(name, "^%*.+%*$") then
-				picked[name] = true
-			end
-		end
-	end
-
-	if next(picked) == nil then
-		return {}, "no NPC here matches " .. table.concat(codes, "/")
-	end
-
-	local names = {}
-	for name in pairs(picked) do
-		table.insert(names, name)
-	end
-	table.sort(names)
-
-	return picked, table.concat(names, ", ") .. "  <- " .. table.concat(codes, "/")
 end
-
--- While on, this drives behindTargets instead of the dropdown.
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-
-		if questFarm then
-			local ok, picked, note = pcall(resolveQuestTargets)
-			if ok then
-				questFarmStatus = note
-				if next(picked) ~= nil then
-					behindTargets = picked
-				else
-					-- An empty set means "anything" to pickTarget, which is the
-					-- opposite of what we want here. Use a name no folder can
-					-- have so nothing matches and the combat loop idles.
-					behindTargets = { ["__no_target__"] = true }
-				end
-			else
-				questFarmStatus = "error: " .. tostring(picked)
-			end
-			task.wait(2)
-		else
-			questFarmStatus = "off"
-			task.wait(0.5)
-		end
-	end
+table.sort(_0x02bd, function(_0x0026, _0x02c1)
+if _0x0026._0x01d8 ~= _0x02c1._0x01d8 then
+return _0x0026._0x01d8 < _0x02c1._0x01d8
+end
+return _0x0026._0x00d3 < _0x02c1._0x00d3
 end)
-
---------------------------------------------------------------------------------
--- LOOT
---------------------------------------------------------------------------------
-
-local tpToGiver  = true
-local questStatus = "off"
-
-local lootOn     = false
-local lootRange  = 0      -- 0 = ignore distance entirely
-local lootFolder = Workspace:FindFirstChild("LootDrops")
-
--- Executors name this differently; fall back to driving the prompt by hand.
-local function fireProx(prompt)
-	local fn = (typeof(fireproximityprompt) == "function" and fireproximityprompt)
-		or (typeof(fireprox) == "function" and fireprox)
-		or (typeof(syn) == "table" and syn.fireproximityprompt)
-
-	if fn then
-		return pcall(fn, prompt)
-	end
-
-	-- Manual path: only works in range and without line-of-sight blocking.
-	return pcall(function()
-		local hold = prompt.HoldDuration
-		prompt.HoldDuration = 0
-		prompt:InputHoldBegin()
-		prompt:InputHoldEnd()
-		prompt.HoldDuration = hold
-	end)
+_0x02b9 = _0x02bd
+_0x02ba = _0x029f and string.char(99, 111, 109, 98, 97, 116) or string.char(97, 108, 108)
+return _0x02bd
 end
-
-local function lootOnce()
-	if lootFolder == nil then
-		lootFolder = Workspace:FindFirstChild("LootDrops")
-		if lootFolder == nil then
-			return 0
-		end
-	end
-
-	local root = myRoot()
-	local fired = 0
-
-	-- Every drop is its own child; never index a fixed .LootDrop.
-	for _, drop in lootFolder:GetChildren() do
-		local prompt = drop:FindFirstChildWhichIsA("ProximityPrompt", true)
-
-		if prompt ~= nil and prompt.Enabled then
-			local inRange = true
-
-			if lootRange > 0 and root ~= nil then
-				local part = prompt.Parent
-				if part ~= nil and part:IsA("BasePart") then
-					inRange = (part.Position - root.Position).Magnitude <= lootRange
-				end
-			end
-
-			if inRange and fireProx(prompt) then
-				fired = fired + 1
-			end
-		end
-	end
-
-	return fired
+local function _0x02cb()
+if _0x006a == nil or type(_0x006a._0x01f1) ~= string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+return nil
 end
-
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-
-		if lootOn then
-			pcall(lootOnce)
-			task.wait(0.3)
-		else
-			task.wait(0.3)
-		end
-	end
+for _0x0053, _0x02cc in _0x02bb() do
+local _0x0063, _0x02cd = pcall(_0x006a._0x01f1, _0x02cc._0x00d3)
+if _0x0063 and _0x02cd then
+if _0x0205(_0x02cc._0x020d) ~= nil then
+return _0x02cc._0x00d3, _0x02cc._0x020d
+end
+end
+end
+end
+local function _0x02d1()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+local _0x022b, _0x02d2 = false, true
+for _0x0053, _0x01cd in (_0x018a and _0x018a:_0x00e5() or {}) do
+local _0x01cf = _0x01cd:_0x0062(string.char(84, 97, 115, 107, 115))
+for _0x0053, _0x01d0 in (_0x01cf and _0x01cf:_0x00e5() or {}) do
+_0x022b = true
+local _0x02d3 = _0x01d0:_0x0062(string.char(86, 97, 108, 117, 101))
+local _0x0125 = _0x01d0:_0x0062(string.char(77, 97, 120))
+if not (_0x02d3 and _0x0125 and _0x0125._0x00c6 > 0 and _0x02d3._0x00c6 >= _0x0125._0x00c6) then
+_0x02d2 = false
+end
+end
+end
+return _0x022b and _0x02d2
+end
+local function _0x02d6()
+local _0x00da = _0x01bd()
+local _0x018a = _0x00da and _0x00da:_0x0062(string.char(72, 111, 108, 100, 101, 114))
+local _0x02d7 = {}
+for _0x0053, _0x01cd in (_0x018a and _0x018a:_0x00e5() or {}) do
+local _0x01cf = _0x01cd:_0x0062(string.char(84, 97, 115, 107, 115))
+for _0x0053, _0x01d0 in (_0x01cf and _0x01cf:_0x00e5() or {}) do
+local _0x003e  = _0x01d0:_0x0062(string.char(67, 111, 100, 101))
+local _0x0118 = _0x01d0:_0x0062(string.char(86, 97, 108, 117, 101))
+local max   = _0x01d0:_0x0062(string.char(77, 97, 120))
+local _0x02d8  = _0x0118 and max and max._0x00c6 > 0 and _0x0118._0x00c6 >= max._0x00c6
+if _0x003e ~= nil and _0x003e._0x00c6 ~= "" and not _0x02d8 then
+table.insert(_0x02d7, _0x003e._0x00c6)
+end
+end
+end
+return _0x02d7
+end
+local function _0x02dc()
+local _0x02d7 = _0x02d6()
+if #_0x02d7 == 0 then
+return {}, string.char(110, 111, 32, 117, 110, 102, 105, 110, 105, 115, 104, 101, 100, 32, 113, 117, 101, 115, 116, 32, 116, 97, 115, 107)
+end
+local _0x0150 = _0x014a()
+if _0x0150 == nil then
+return {}, string.char(114, 101, 103, 105, 111, 110, 32, 104, 97, 115, 32, 110, 111, 32, 65, 99, 116, 105, 118, 101, 78, 112, 99, 115)
+end
+local _0x014c = {}
+for _0x0053, _0x00da in _0x0150:_0x00e5() do
+if _0x00da:_0x0151(string.char(70, 111, 108, 100, 101, 114)) then
+_0x014c[_0x00da._0x0046] = true
+end
+end
+local _0x02dd = {}
+for _0x0053, _0x003e in _0x02d7 do
+local _0x02de = string.lower(_0x003e)
+if _0x014c[_0x003e] then
+_0x02dd[_0x003e] = true
+end
+for _0x0053, _0x0061 in (_0x0286[_0x003e] or {}) do
+if _0x014c[_0x0061] then
+_0x02dd[_0x0061] = true
+end
+end
+for _0x0061 in pairs(_0x014c) do
+local _0x00ef = string.lower((string.gsub(_0x0061, string.char(37, 42), "")))
+if #_0x00ef > 2 and string.find(_0x02de, _0x00ef, 1, true) then
+_0x02dd[_0x0061] = true
+end
+end
+end
+if next(_0x02dd) == nil then
+for _0x0061 in pairs(_0x014c) do
+if string.match(_0x0061, string.char(94, 37, 42, 46, 43, 37, 42, 36)) then
+_0x02dd[_0x0061] = true
+end
+end
+end
+if next(_0x02dd) == nil then
+return {}, string.char(110, 111, 32, 78, 80, 67, 32, 104, 101, 114, 101, 32, 109, 97, 116, 99, 104, 101, 115, 32) .. table.concat(_0x02d7, string.char(47))
+end
+local _0x013f = {}
+for _0x0061 in pairs(_0x02dd) do
+table.insert(_0x013f, _0x0061)
+end
+table.sort(_0x013f)
+return _0x02dd, table.concat(_0x013f, string.char(44, 32)) .. string.char(32, 32, 60, 45, 32) .. table.concat(_0x02d7, string.char(47))
+end
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+if _0x0287 then
+local _0x0063, _0x02dd, _0x02e7 = pcall(_0x02dc)
+if _0x0063 then
+_0x0288 = _0x02e7
+if next(_0x02dd) ~= nil then
+_0x0145 = _0x02dd
+else
+_0x0145 = { [string.char(95, 95, 110, 111, 95, 116, 97, 114, 103, 101, 116, 95, 95)] = true }
+end
+else
+_0x0288 = string.char(101, 114, 114, 111, 114, 58, 32) .. tostring(_0x02dd)
+end
+_0x0128._0x0113(2)
+else
+_0x0288 = string.char(111, 102, 102)
+_0x0128._0x0113(0.5)
+end
+end
 end)
-
---------------------------------------------------------------------------------
--- EQUIP
---------------------------------------------------------------------------------
-
--- Remote: FireServer("AccessoryEquip", <slot>, <itemId>, <category>)
--- itemId is the per-save-slot serial from Inventory.HighestId, NOT a global
--- item type id - confirmed by cross-referencing another player's equipped
--- slots against their inventory. Never hardcode one.
-local EQUIP_SLOTS      = { "One", "Two", "Three", "Four", "Five" }
-local EQUIP_CATEGORIES = { "Stats", "Vanity" }
-
-local function playerData()
-	if Utility ~= nil and type(Utility.GetData) == "function" then
-		local ok, data = pcall(Utility.GetData, LocalPlayer)
-		if ok and data ~= nil then
-			return data
-		end
-	end
-
-	local service = ReplicatedStorage:FindFirstChild("Player_Service")
-	local all     = service and service:FindFirstChild("Data")
-	local mine    = all and all:FindFirstChild(LocalPlayer.Name)
-	local slots   = mine and mine:FindFirstChild("slots")
-
-	if slots ~= nil then
-		for _, slot in slots:GetChildren() do
-			if slot:FindFirstChild("Inventory") ~= nil then
-				return slot
-			end
-		end
-	end
+local _0x02f1  = true
+local _0x02f2 = string.char(111, 102, 102)
+local _0x02f3     = false
+local _0x02f4  = 0
+local _0x02f6 = _0x0031:_0x0062(string.char(76, 111, 111, 116, 68, 114, 111, 112, 115))
+local function _0x02fc(_0x02fa)
+local _0x01f8 = (_0x004c(_0x02fd) == string.char(102, 117, 110, 99, 116, 105, 111, 110) and _0x02fd)
+or (_0x004c(_0x02fe) == string.char(102, 117, 110, 99, 116, 105, 111, 110) and _0x02fe)
+or (_0x004c(_0x004f) == string.char(116, 97, 98, 108, 101) and _0x004f._0x02fd)
+if _0x01f8 then
+return pcall(_0x01f8, _0x02fa)
 end
-
--- Owned items live in Inventory.Inventory, each with an Id child.
-local function inventoryItems()
-	local data  = playerData()
-	local outer = data and data:FindFirstChild("Inventory")
-	local inner = outer and outer:FindFirstChild("Inventory")
-	local items = {}
-
-	if inner ~= nil then
-		for _, item in inner:GetChildren() do
-			local id     = item:FindFirstChild("Id")
-			local amount = item:FindFirstChild("Amount")
-			table.insert(items, {
-				name   = item.Name,
-				id     = id and id.Value or nil,
-				amount = amount and amount.Value or 1,
-			})
-		end
-	end
-
-	table.sort(items, function(a, b)
-		return (a.id or 0) < (b.id or 0)
-	end)
-
-	return items
+return pcall(function()
+local _0x025e = _0x02fa._0x0305
+_0x02fa._0x0305 = 0
+_0x02fa:_0x0306()
+_0x02fa:_0x0307()
+_0x02fa._0x0305 = _0x025e
+end)
 end
-
-
-local function findItemId(name)
-	for _, item in inventoryItems() do
-		if item.name == name then
-			return item.id
-		end
-	end
+local function _0x0308()
+if _0x02f6 == nil then
+_0x02f6 = _0x0031:_0x0062(string.char(76, 111, 111, 116, 68, 114, 111, 112, 115))
+if _0x02f6 == nil then
+return 0
 end
-
-local function equippedSlots(category)
-	local data   = playerData()
-	local inv    = data and data:FindFirstChild("Inventory")
-	local acc    = inv and inv:FindFirstChild("Accessories")
-	local folder = acc and acc:FindFirstChild(category or "Stats")
-	local out = {}
-
-	if folder ~= nil then
-		for _, slot in folder:GetChildren() do
-			out[slot.Name] = slot.Value
-		end
-	end
-
-	return out
 end
-
-local function equipAccessory(item, slot, category)
-	slot     = slot or "One"
-	category = category or "Stats"
-
-	local id = item
-	if type(item) == "string" then
-		id = findItemId(item)
-		if id == nil then
-			return false, "not in inventory: " .. tostring(item)
-		end
-	end
-
-	if type(id) ~= "number" then
-		return false, "item must be a name or numeric id"
-	end
-
-	Event:FireServer("AccessoryEquip", slot, id, category)
-	return true
+local _0x0160 = _0x0152()
+local _0x0309 = 0
+for _0x0053, _0x030b in _0x02f6:_0x00e5() do
+local _0x02fa = _0x030b:_0x030f(string.char(80, 114, 111, 120, 105, 109, 105, 116, 121, 80, 114, 111, 109, 112, 116), true)
+if _0x02fa ~= nil and _0x02fa._0x0310 then
+local _0x0311 = true
+if _0x02f4 > 0 and _0x0160 ~= nil then
+local _0x0209 = _0x02fa._0x0196
+if _0x0209 ~= nil and _0x0209:_0x0151(string.char(66, 97, 115, 101, 80, 97, 114, 116)) then
+_0x0311 = (_0x0209._0x0167 - _0x0160._0x0167)._0x0168 <= _0x02f4
 end
-
--- Fire-and-forget remote, so confirm the slot actually changed.
-local function equipAndWait(item, slot, category, timeout)
-	slot     = slot or "One"
-	category = category or "Stats"
-
-	local before = equippedSlots(category)[slot]
-	local ok, reason = equipAccessory(item, slot, category)
-	if not ok then
-		return false, reason
-	end
-
-	local deadline = os_clock() + (timeout or 2)
-	repeat
-		task.wait(0.1)
-	until equippedSlots(category)[slot] ~= before or os_clock() > deadline
-
-	if equippedSlots(category)[slot] ~= before then
-		return true
-	end
-	return false, "NotApplied"
 end
-
--- Toolbar holds weapons / fighting styles, separate from Accessories.
---   FireServer("Toolbar_Equip", slot, itemId)   -- 3 args, no category
-local TOOLBAR_SLOTS = { "One", "Two", "Three", "Four", "Five" }
-
-local function toolbarSlots()
-	local data = playerData()
-	local inv  = data and data:FindFirstChild("Inventory")
-	local tb   = inv and inv:FindFirstChild("Toolbar")
-	local out = {}
-	for _, slot in (tb and tb:GetChildren() or {}) do
-		out[slot.Name] = slot.Value
-	end
-	return out
+if _0x0311 and _0x02fc(_0x02fa) then
+_0x0309 = _0x0309 + 1
 end
-
--- Items worth putting on the toolbar: anything flagged HasCombat.
-local function combatItems()
-	local names = {}
-	for _, item in inventoryItems() do
-		local def = Items and Items[item.name]
-		if def ~= nil and def.HasCombat then
-			table.insert(names, item.name)
-		end
-	end
-	table.sort(names)
-	if #names == 0 then
-		table.insert(names, "<none>")
-	end
-	return names
 end
-
--- Toolbar slots are raw key input, not InputHandler actions - GetMapping()
--- returns nil and no "Slot1"/"Toolbar1" action is bound - so pressing the
--- number key is the only way to actually DRAW the weapon.
---
--- Toolbar_Equip only puts an item INTO a slot; until the key is pressed,
--- Tool_Accessories stays empty and the combat preset resolves to nothing.
-local VirtualInput = nil
-pcall(function() VirtualInput = game:GetService("VirtualInputManager") end)
-
-local SLOT_KEYS = {
-	One   = Enum.KeyCode.One,
-	Two   = Enum.KeyCode.Two,
-	Three = Enum.KeyCode.Three,
-	Four  = Enum.KeyCode.Four,
-	Five  = Enum.KeyCode.Five,
+end
+return _0x0309
+end
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+if _0x02f3 then
+pcall(_0x0308)
+_0x0128._0x0113(0.3)
+else
+_0x0128._0x0113(0.3)
+end
+end
+end)
+local _0x0323      = { string.char(79, 110, 101), string.char(84, 119, 111), string.char(84, 104, 114, 101, 101), string.char(70, 111, 117, 114), string.char(70, 105, 118, 101) }
+local _0x0324 = { string.char(83, 116, 97, 116, 115), string.char(86, 97, 110, 105, 116, 121) }
+local function _0x0325()
+if _0x0069 ~= nil and type(_0x0069._0x01be) == string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+local _0x0063, _0x01bf = pcall(_0x0069._0x01be, _0x0032)
+if _0x0063 and _0x01bf ~= nil then
+return _0x01bf
+end
+end
+local _0x01c1 = _0x002f:_0x0062(string.char(80, 108, 97, 121, 101, 114, 95, 83, 101, 114, 118, 105, 99, 101))
+local _0x0058     = _0x01c1 and _0x01c1:_0x0062(string.char(68, 97, 116, 97))
+local _0x01c2    = _0x0058 and _0x0058:_0x0062(_0x0032._0x0046)
+local _0x01c3   = _0x01c2 and _0x01c2:_0x0062(string.char(115, 108, 111, 116, 115))
+if _0x01c3 ~= nil then
+for _0x0053, _0x01c4 in _0x01c3:_0x00e5() do
+if _0x01c4:_0x0062(string.char(73, 110, 118, 101, 110, 116, 111, 114, 121)) ~= nil then
+return _0x01c4
+end
+end
+end
+end
+local function _0x032a()
+local _0x01bf  = _0x0325()
+local _0x032b = _0x01bf and _0x01bf:_0x0062(string.char(73, 110, 118, 101, 110, 116, 111, 114, 121))
+local _0x032c = _0x032b and _0x032b:_0x0062(string.char(73, 110, 118, 101, 110, 116, 111, 114, 121))
+local _0x0327 = {}
+if _0x032c ~= nil then
+for _0x0053, _0x00c9 in _0x032c:_0x00e5() do
+local _0x031a     = _0x00c9:_0x0062(string.char(73, 100))
+local _0x032d = _0x00c9:_0x0062(string.char(65, 109, 111, 117, 110, 116))
+table.insert(_0x0327, {
+_0x0061   = _0x00c9._0x0046,
+_0x031a     = _0x031a and _0x031a._0x00c6 or nil,
+_0x032d = _0x032d and _0x032d._0x00c6 or 1,
+})
+end
+end
+table.sort(_0x0327, function(_0x0026, _0x02c1)
+return (_0x0026._0x031a or 0) < (_0x02c1._0x031a or 0)
+end)
+return _0x0327
+end
+local function _0x032e(_0x0061)
+for _0x0053, _0x00c9 in _0x032a() do
+if _0x00c9._0x0061 == _0x0061 then
+return _0x00c9._0x031a
+end
+end
+end
+local function _0x032f(_0x02be)
+local _0x01bf   = _0x0325()
+local _0x0330    = _0x01bf and _0x01bf:_0x0062(string.char(73, 110, 118, 101, 110, 116, 111, 114, 121))
+local _0x0331    = _0x0330 and _0x0330:_0x0062(string.char(65, 99, 99, 101, 115, 115, 111, 114, 105, 101, 115))
+local _0x00da = _0x0331 and _0x0331:_0x0062(_0x02be or string.char(83, 116, 97, 116, 115))
+local _0x0332 = {}
+if _0x00da ~= nil then
+for _0x0053, _0x01c4 in _0x00da:_0x00e5() do
+_0x0332[_0x01c4._0x0046] = _0x01c4._0x00c6
+end
+end
+return _0x0332
+end
+local function _0x0333(_0x00c9, _0x01c4, _0x02be)
+_0x01c4     = _0x01c4 or string.char(79, 110, 101)
+_0x02be = _0x02be or string.char(83, 116, 97, 116, 115)
+local _0x031a = _0x00c9
+if type(_0x00c9) == string.char(115, 116, 114, 105, 110, 103) then
+_0x031a = _0x032e(_0x00c9)
+if _0x031a == nil then
+return false, string.char(110, 111, 116, 32, 105, 110, 32, 105, 110, 118, 101, 110, 116, 111, 114, 121, 58, 32) .. tostring(_0x00c9)
+end
+end
+if type(_0x031a) ~= string.char(110, 117, 109, 98, 101, 114) then
+return false, string.char(105, 116, 101, 109, 32, 109, 117, 115, 116, 32, 98, 101, 32, 97, 32, 110, 97, 109, 101, 32, 111, 114, 32, 110, 117, 109, 101, 114, 105, 99, 32, 105, 100)
+end
+_0x0073:_0x00b5(string.char(65, 99, 99, 101, 115, 115, 111, 114, 121, 69, 113, 117, 105, 112), _0x01c4, _0x031a, _0x02be)
+return true
+end
+local function _0x0338(_0x00c9, _0x01c4, _0x02be, _0x0339)
+_0x01c4     = _0x01c4 or string.char(79, 110, 101)
+_0x02be = _0x02be or string.char(83, 116, 97, 116, 115)
+local _0x0042 = _0x032f(_0x02be)[_0x01c4]
+local _0x0063, _0x013a = _0x0333(_0x00c9, _0x01c4, _0x02be)
+if not _0x0063 then
+return false, _0x013a
+end
+local _0x033a = _0x0033() + (_0x0339 or 2)
+repeat
+_0x0128._0x0113(0.1)
+until _0x032f(_0x02be)[_0x01c4] ~= _0x0042 or _0x0033() > _0x033a
+if _0x032f(_0x02be)[_0x01c4] ~= _0x0042 then
+return true
+end
+return false, string.char(78, 111, 116, 65, 112, 112, 108, 105, 101, 100)
+end
+local _0x0342 = { string.char(79, 110, 101), string.char(84, 119, 111), string.char(84, 104, 114, 101, 101), string.char(70, 111, 117, 114), string.char(70, 105, 118, 101) }
+local function _0x0343()
+local _0x01bf = _0x0325()
+local _0x0330  = _0x01bf and _0x01bf:_0x0062(string.char(73, 110, 118, 101, 110, 116, 111, 114, 121))
+local _0x0344   = _0x0330 and _0x0330:_0x0062(string.char(84, 111, 111, 108, 98, 97, 114))
+local _0x0332 = {}
+for _0x0053, _0x01c4 in (_0x0344 and _0x0344:_0x00e5() or {}) do
+_0x0332[_0x01c4._0x0046] = _0x01c4._0x00c6
+end
+return _0x0332
+end
+local function _0x0348()
+local _0x013f = {}
+for _0x0053, _0x00c9 in _0x032a() do
+local _0x0211 = _0x0068 and _0x0068[_0x00c9._0x0061]
+if _0x0211 ~= nil and _0x0211._0x00ca then
+table.insert(_0x013f, _0x00c9._0x0061)
+end
+end
+table.sort(_0x013f)
+if #_0x013f == 0 then
+table.insert(_0x013f, string.char(60, 110, 111, 110, 101, 62))
+end
+return _0x013f
+end
+local _0x035a = nil
+pcall(function() _0x035a = _0x0014:_0x002e(string.char(86, 105, 114, 116, 117, 97, 108, 73, 110, 112, 117, 116, 77, 97, 110, 97, 103, 101, 114)) end)
+local _0x035b = {
+_0x035c   = _0x035d._0x035e._0x035c,
+_0x035f   = _0x035d._0x035e._0x035f,
+_0x0360 = _0x035d._0x035e._0x0360,
+_0x0361  = _0x035d._0x035e._0x0361,
+_0x0362  = _0x035d._0x035e._0x0362,
 }
-
-local function pressSlotKey(slotName)
-	local key = SLOT_KEYS[slotName]
-	if key == nil then
-		return false, "bad slot " .. tostring(slotName)
-	end
-	if VirtualInput == nil then
-		return false, "no VirtualInputManager"
-	end
-
-	local ok = pcall(function()
-		VirtualInput:SendKeyEvent(true, key, false, game)
-		task.wait(0.05)
-		VirtualInput:SendKeyEvent(false, key, false, game)
-	end)
-
-	return ok, ok and "pressed" or "SendKeyEvent failed"
+local function _0x0363(_0x0364)
+local _0x00d3 = _0x035b[_0x0364]
+if _0x00d3 == nil then
+return false, string.char(98, 97, 100, 32, 115, 108, 111, 116, 32) .. tostring(_0x0364)
 end
-
--- Is anything actually drawn right now?
-local function weaponDrawn()
-	local humanoids = Workspace:FindFirstChild("Humanoids")
-	local char = (humanoids and humanoids:FindFirstChild(LocalPlayer.Name)) or LocalPlayer.Character
-	local tools = char and char:FindFirstChild("Tool_Accessories")
-	return tools ~= nil and #tools:GetChildren() > 0
+if _0x035a == nil then
+return false, string.char(110, 111, 32, 86, 105, 114, 116, 117, 97, 108, 73, 110, 112, 117, 116, 77, 97, 110, 97, 103, 101, 114)
 end
-
-local function toolbarEquip(itemName, slot)
-	slot = slot or "One"
-
-	local id = findItemId(itemName)
-	if id == nil then
-		return false, "not in inventory: " .. tostring(itemName)
-	end
-
-	local before = toolbarSlots()[slot]
-	Event:FireServer("Toolbar_Equip", slot, id)
-
-	local deadline = os_clock() + 2
-	repeat
-		task.wait(0.1)
-	until toolbarSlots()[slot] ~= before or os_clock() > deadline
-
-	if toolbarSlots()[slot] ~= before then
-		return true
-	end
-	return false, "NotApplied"
+local _0x0063 = pcall(function()
+_0x035a:_0x0365(true, _0x00d3, false, _0x0014)
+_0x0128._0x0113(0.05)
+_0x035a:_0x0365(false, _0x00d3, false, _0x0014)
+end)
+return _0x0063, _0x0063 and string.char(112, 114, 101, 115, 115, 101, 100) or string.char(83, 101, 110, 100, 75, 101, 121, 69, 118, 101, 110, 116, 32, 102, 97, 105, 108, 101, 100)
 end
-
--- Human-readable toolbar + what combat preset that resolves to.
-local function equipStatus()
-	local slots = toolbarSlots()
-	local byId = {}
-	for _, item in inventoryItems() do
-		if item.id then byId[item.id] = item.name end
-	end
-
-	local bits = {}
-	for _, slot in TOOLBAR_SLOTS do
-		local id = slots[slot] or 0
-		if id ~= 0 then
-			table.insert(bits, slot .. ": " .. (byId[id] or ("id " .. tostring(id))))
-		end
-	end
-
-	local line = #bits > 0 and table.concat(bits, "\n") or "toolbar empty"
-
-	local _, presetName = resolvePreset()
-	return line .. "\npreset: " .. tostring(presetName or "none - nothing equipped")
+local function _0x0368()
+local _0x00e2 = _0x0031:_0x0062(string.char(72, 117, 109, 97, 110, 111, 105, 100, 115))
+local char = (_0x00e2 and _0x00e2:_0x0062(_0x0032._0x0046)) or _0x0032._0x00c3
+local _0x00e3 = char and char:_0x0062(string.char(84, 111, 111, 108, 95, 65, 99, 99, 101, 115, 115, 111, 114, 105, 101, 115))
+return _0x00e3 ~= nil and #_0x00e3:_0x00e5() > 0
 end
-
--- Stats arrive on wildly different scales ("Additional Damage Factor" is
--- ~0.02-0.05 while "Max Health" is 10-150), so weights normalise them into one
--- comparable number. These are a judgement call, not read from the game.
-local EQUIP_MODES = {
-	balanced = {
-		["Additional Damage Factor"] = 1000, ["Additional Damage"] = 10,
-		["Damage Reduction Factor"] = 800,   ["Damage Reduction"] = 8,
-		["Max Health Factor"] = 600,         ["Max Health"] = 1,
-		["Max Stamina"] = 0.8,               ["Movement Speed Factor"] = 600,
-		["Health Regen Speed"] = 4,          ["Stamina Regen Speed"] = 3,
-		["Block Points"] = 4,                ["Block Regen"] = 4,
-	},
-	damage = { ["Additional Damage Factor"] = 1000, ["Additional Damage"] = 10 },
-	tank = {
-		["Max Health"] = 1, ["Max Health Factor"] = 600,
-		["Damage Reduction Factor"] = 800, ["Damage Reduction"] = 8,
-		["Health Regen Speed"] = 4, ["Block Points"] = 4, ["Block Regen"] = 4,
-	},
-	stamina = { ["Max Stamina"] = 1, ["Stamina Regen Speed"] = 4 },
-	speed = { ["Movement Speed Factor"] = 1000 },
+local function _0x0369(_0x036a, _0x01c4)
+_0x01c4 = _0x01c4 or string.char(79, 110, 101)
+local _0x031a = _0x032e(_0x036a)
+if _0x031a == nil then
+return false, string.char(110, 111, 116, 32, 105, 110, 32, 105, 110, 118, 101, 110, 116, 111, 114, 121, 58, 32) .. tostring(_0x036a)
+end
+local _0x0042 = _0x0343()[_0x01c4]
+_0x0073:_0x00b5(string.char(84, 111, 111, 108, 98, 97, 114, 95, 69, 113, 117, 105, 112), _0x01c4, _0x031a)
+local _0x033a = _0x0033() + 2
+repeat
+_0x0128._0x0113(0.1)
+until _0x0343()[_0x01c4] ~= _0x0042 or _0x0033() > _0x033a
+if _0x0343()[_0x01c4] ~= _0x0042 then
+return true
+end
+return false, string.char(78, 111, 116, 65, 112, 112, 108, 105, 101, 100)
+end
+local function _0x036d()
+local _0x01c3 = _0x0343()
+local _0x036e = {}
+for _0x0053, _0x00c9 in _0x032a() do
+if _0x00c9._0x031a then _0x036e[_0x00c9._0x031a] = _0x00c9._0x0061 end
+end
+local _0x01ce = {}
+for _0x0053, _0x01c4 in _0x0342 do
+local _0x031a = _0x01c3[_0x01c4] or 0
+if _0x031a ~= 0 then
+table.insert(_0x01ce, _0x01c4 .. string.char(58, 32) .. (_0x036e[_0x031a] or (string.char(105, 100, 32) .. tostring(_0x031a))))
+end
+end
+local _0x01a9 = #_0x01ce > 0 and table.concat(_0x01ce, string.char(10)) or string.char(116, 111, 111, 108, 98, 97, 114, 32, 101, 109, 112, 116, 121)
+local _0x0053, _0x00f1 = _0x00f5()
+return _0x01a9 .. string.char(10, 112, 114, 101, 115, 101, 116, 58, 32) .. tostring(_0x00f1 or string.char(110, 111, 110, 101, 32, 45, 32, 110, 111, 116, 104, 105, 110, 103, 32, 101, 113, 117, 105, 112, 112, 101, 100))
+end
+local _0x037a = {
+_0x037b = {
+[string.char(65, 100, 100, 105, 116, 105, 111, 110, 97, 108, 32, 68, 97, 109, 97, 103, 101, 32, 70, 97, 99, 116, 111, 114)] = 1000, [string.char(65, 100, 100, 105, 116, 105, 111, 110, 97, 108, 32, 68, 97, 109, 97, 103, 101)] = 10,
+[string.char(68, 97, 109, 97, 103, 101, 32, 82, 101, 100, 117, 99, 116, 105, 111, 110, 32, 70, 97, 99, 116, 111, 114)] = 800,   [string.char(68, 97, 109, 97, 103, 101, 32, 82, 101, 100, 117, 99, 116, 105, 111, 110)] = 8,
+[string.char(77, 97, 120, 32, 72, 101, 97, 108, 116, 104, 32, 70, 97, 99, 116, 111, 114)] = (682 - 82),         [string.char(77, 97, 120, 32, 72, 101, 97, 108, 116, 104)] = 1,
+[string.char(77, 97, 120, 32, 83, 116, 97, 109, 105, 110, 97)] = 0.8,               [string.char(77, 111, 118, 101, 109, 101, 110, 116, 32, 83, 112, 101, 101, 100, 32, 70, 97, 99, 116, 111, 114)] = 600,
+[string.char(72, 101, 97, 108, 116, 104, 32, 82, 101, 103, 101, 110, 32, 83, 112, 101, 101, 100)] = 4,          [string.char(83, 116, 97, 109, 105, 110, 97, 32, 82, 101, 103, 101, 110, 32, 83, 112, 101, 101, 100)] = 3,
+[string.char(66, 108, 111, 99, 107, 32, 80, 111, 105, 110, 116, 115)] = 4,                [string.char(66, 108, 111, 99, 107, 32, 82, 101, 103, 101, 110)] = 4,
+},
+_0x016e = { [string.char(65, 100, 100, 105, 116, 105, 111, 110, 97, 108, 32, 68, 97, 109, 97, 103, 101, 32, 70, 97, 99, 116, 111, 114)] = 1000, [string.char(65, 100, 100, 105, 116, 105, 111, 110, 97, 108, 32, 68, 97, 109, 97, 103, 101)] = 10 },
+_0x037c = {
+[string.char(77, 97, 120, 32, 72, 101, 97, 108, 116, 104)] = 1, [string.char(77, 97, 120, 32, 72, 101, 97, 108, 116, 104, 32, 70, 97, 99, 116, 111, 114)] = (300 + 300),
+[string.char(68, 97, 109, 97, 103, 101, 32, 82, 101, 100, 117, 99, 116, 105, 111, 110, 32, 70, 97, 99, 116, 111, 114)] = 800, [string.char(68, 97, 109, 97, 103, 101, 32, 82, 101, 100, 117, 99, 116, 105, 111, 110)] = (45 - 37),
+[string.char(72, 101, 97, 108, 116, 104, 32, 82, 101, 103, 101, 110, 32, 83, 112, 101, 101, 100)] = 4, [string.char(66, 108, 111, 99, 107, 32, 80, 111, 105, 110, 116, 115)] = 4, [string.char(66, 108, 111, 99, 107, 32, 82, 101, 103, 101, 110)] = 4,
+},
+_0x037d = { [string.char(77, 97, 120, 32, 83, 116, 97, 109, 105, 110, 97)] = 1, [string.char(83, 116, 97, 109, 105, 110, 97, 32, 82, 101, 103, 101, 110, 32, 83, 112, 101, 101, 100)] = (20 - 16) },
+_0x037e = { [string.char(77, 111, 118, 101, 109, 101, 110, 116, 32, 83, 112, 101, 101, 100, 32, 70, 97, 99, 116, 111, 114)] = (4000 / 4) },
 }
-
-local function scoreItem(name, mode)
-	local def = Items and Items[name]
-	local stats = def and def.Stats
-	if type(stats) ~= "table" then
-		return nil
-	end
-
-	local weights = EQUIP_MODES[mode or "balanced"] or EQUIP_MODES.balanced
-	local score = 0
-	for key, value in pairs(stats) do
-		if type(value) == "number" then
-			score = score + value * (weights[key] or 0)
-		end
-	end
-	return score
+local function _0x037f(_0x0061, _0x0380)
+local _0x0211 = _0x0068 and _0x0068[_0x0061]
+local _0x0381 = _0x0211 and _0x0211._0x036f
+if type(_0x0381) ~= string.char(116, 97, 98, 108, 101) then
+return nil
 end
-
-local function rankedItems(mode)
-	local ranked = {}
-	for _, item in inventoryItems() do
-		local score = scoreItem(item.name, mode)
-		if score ~= nil then
-			table.insert(ranked, { name = item.name, id = item.id, score = score })
-		end
-	end
-	table.sort(ranked, function(a, b)
-		return a.score > b.score
-	end)
-	return ranked
+local _0x0374 = _0x037a[_0x0380 or string.char(98, 97, 108, 97, 110, 99, 101, 100)] or _0x037a._0x037b
+local _0x0382 = 0
+for _0x00d3, _0x0118 in pairs(_0x0381) do
+if type(_0x0118) == string.char(110, 117, 109, 98, 101, 114) then
+_0x0382 = _0x0382 + _0x0118 * (_0x0374[_0x00d3] or 0)
 end
-
--- Slot/EquipType compatibility rules are unknown - one player has EquipType=3
--- items across all five Stats slots while another has an EquipType=5 haori in
--- Stats.One - so assign greedily and verify each landed rather than assume.
-local function equipBest(mode, category, dryRun)
-	category = category or "Stats"
-	local ranked = rankedItems(mode)
-
-	if #ranked == 0 then
-		return { note = "no owned item has a Stats field", equipped = {}, failed = {}, skipped = {} }
-	end
-
-	local already = equippedSlots(category)
-	local taken = {}
-	for _, value in pairs(already) do
-		if value ~= 0 then
-			taken[value] = true
-		end
-	end
-
-	local report = { equipped = {}, failed = {}, skipped = {} }
-	local index = 1
-
-	for _, slot in EQUIP_SLOTS do
-		while index <= #ranked and taken[ranked[index].id] do
-			table.insert(report.skipped, ranked[index].name)
-			index = index + 1
-		end
-		if index > #ranked then
-			break
-		end
-
-		local pick = ranked[index]
-
-		if already[slot] == pick.id then
-			table.insert(report.skipped, pick.name)
-		elseif dryRun then
-			table.insert(report.equipped, pick.name .. " -> " .. slot)
-		else
-			local ok, reason = equipAndWait(pick.id, slot, category)
-			if ok then
-				table.insert(report.equipped, pick.name .. " -> " .. slot)
-				taken[pick.id] = true
-			else
-				table.insert(report.failed, pick.name .. " -> " .. slot .. ": " .. tostring(reason))
-			end
-		end
-
-		index = index + 1
-	end
-
-	return report
 end
-
-
--- Quest givers carry a ProximityPrompt at <Npc>.HumanoidRootPart.<Npc>,
--- tagged "Dialogue", key T, HoldDuration 0, MaxActivationDistance 10.
--- Componentloader listens on PromptTriggered and opens the dialogue from it,
--- so firing the prompt is the same as pressing T.
-local function findDialoguePrompt(npcName)
-	if npcName == nil then return nil end
-
-	local debree = Workspace:FindFirstChild("Debree")
-	local regions = debree and debree:FindFirstChild("Regions")
-
-	for _, region in (regions and regions:GetChildren() or {}) do
-		local sf = region:FindFirstChild("StationaryNpcs")
-		local npc = sf and sf:FindFirstChild(npcName)
-		if npc then
-			for _, d in npc:GetDescendants() do
-				if d:IsA("ProximityPrompt") and d.Enabled then
-					return d
-				end
-			end
-		end
-	end
+return _0x0382
 end
-
--- Componentloader ignores PromptTriggered unless prompts are visible, so make
--- sure that flag is on before firing - otherwise nothing happens at all.
-local function allowPrompts()
-	local cam = ReplicatedStorage:FindFirstChild("CAM")
-	local layout = cam and cam.Client and cam.Client:FindFirstChild("Components")
-	layout = layout and layout:FindFirstChild("Layout")
-	local vis = layout and layout:FindFirstChild("Visibility")
-	local prompts = vis and vis:FindFirstChild("Prompts")
-	if prompts ~= nil and prompts.Value == false then
-		pcall(function() prompts.Value = true end)
-	end
+local function _0x0383(_0x0380)
+local _0x0384 = {}
+for _0x0053, _0x00c9 in _0x032a() do
+local _0x0382 = _0x037f(_0x00c9._0x0061, _0x0380)
+if _0x0382 ~= nil then
+table.insert(_0x0384, { _0x0061 = _0x00c9._0x0061, _0x031a = _0x00c9._0x031a, _0x0382 = _0x0382 })
 end
-
--- Walk up to the NPC and press T on them.
-local function talkTo(npcName)
-	local prompt = findDialoguePrompt(npcName)
-	if prompt == nil then
-		return false, "no dialogue prompt on " .. tostring(npcName)
-	end
-
-	-- get inside MaxActivationDistance; firing bypasses it but the server
-	-- still cares where you are standing
-	local part = prompt.Parent
-	if part and part:IsA("BasePart") then
-		teleportTo(part.Position)
-		task.wait(0.3)
-	end
-
-	allowPrompts()
-
-	local ok = fireProx(prompt)
-	return ok and true or false, ok and "talked" or "fire failed"
 end
-
---------------------------------------------------------------------------------
--- TRAVEL
---------------------------------------------------------------------------------
-
--- Region hubs are SpawnCrystal models under Workspace.Debree.Regions.<Region>.
--- Their parts are not streamed in, so GetPivot() is the only way to read a
--- position off them - PrimaryPart and GetChildren() both come back empty.
-local function regionHubs()
-	local out, order = {}, {}
-	local debree = Workspace:FindFirstChild("Debree")
-	local regions = debree and debree:FindFirstChild("Regions")
-
-	for _, region in (regions and regions:GetChildren() or {}) do
-		for _, c in region:GetChildren() do
-			if string.find(c.Name, "SpawnCrystal") and c:IsA("Model") then
-				local ok, cf = pcall(function() return c:GetPivot() end)
-				if ok then
-					local label = tostring(c:GetAttribute("SpawnArea") or region.Name)
-					if out[label] == nil then
-						out[label] = cf.Position
-						table.insert(order, label)
-					end
-				end
-			end
-		end
-	end
-
-	table.sort(order)
-	return out, order
+table.sort(_0x0384, function(_0x0026, _0x02c1)
+return _0x0026._0x0382 > _0x02c1._0x0382
+end)
+return _0x0384
 end
-
-local BREATHING_TRAINERS = {
-	"Flame Trainer Rengu", "Insect Trainer Shinora", "Serpent Trainer Obari",
-	"Sound Trainer Tengai", "Stone Trainer Gyorei", "Thunder Trainer Zentaro",
-	"Water Trainer Urokodaki", "Wind Trainer Saneri",
+local function _0x0391(_0x0380, _0x02be, _0x0392)
+_0x02be = _0x02be or string.char(83, 116, 97, 116, 115)
+local _0x0384 = _0x0383(_0x0380)
+if #_0x0384 == 0 then
+return { _0x02e7 = string.char(110, 111, 32, 111, 119, 110, 101, 100, 32, 105, 116, 101, 109, 32, 104, 97, 115, 32, 97, 32, 83, 116, 97, 116, 115, 32, 102, 105, 101, 108, 100), _0x00d1 = {}, _0x0393 = {}, _0x0394 = {} }
+end
+local _0x02c6 = _0x032f(_0x02be)
+local _0x0395 = {}
+for _0x0053, _0x0118 in pairs(_0x02c6) do
+if _0x0118 ~= 0 then
+_0x0395[_0x0118] = true
+end
+end
+local _0x0396 = { _0x00d1 = {}, _0x0393 = {}, _0x0394 = {} }
+local _0x030c = 1
+for _0x0053, _0x01c4 in _0x0323 do
+while _0x030c <= #_0x0384 and _0x0395[_0x0384[_0x030c]._0x031a] do
+table.insert(_0x0396._0x0394, _0x0384[_0x030c]._0x0061)
+_0x030c = _0x030c + 1
+end
+if _0x030c > #_0x0384 then
+break
+end
+local _0x0271 = _0x0384[_0x030c]
+if _0x02c6[_0x01c4] == _0x0271._0x031a then
+table.insert(_0x0396._0x0394, _0x0271._0x0061)
+elseif _0x0392 then
+table.insert(_0x0396._0x00d1, _0x0271._0x0061 .. string.char(32, 45, 62, 32) .. _0x01c4)
+else
+local _0x0063, _0x013a = _0x0338(_0x0271._0x031a, _0x01c4, _0x02be)
+if _0x0063 then
+table.insert(_0x0396._0x00d1, _0x0271._0x0061 .. string.char(32, 45, 62, 32) .. _0x01c4)
+_0x0395[_0x0271._0x031a] = true
+else
+table.insert(_0x0396._0x0393, _0x0271._0x0061 .. string.char(32, 45, 62, 32) .. _0x01c4 .. string.char(58, 32) .. tostring(_0x013a))
+end
+end
+_0x030c = _0x030c + 1
+end
+return _0x0396
+end
+local function _0x03a2(_0x0206)
+if _0x0206 == nil then return nil end
+local _0x0207 = _0x0031:_0x0062(string.char(68, 101, 98, 114, 101, 101))
+local _0x0147 = _0x0207 and _0x0207:_0x0062(string.char(82, 101, 103, 105, 111, 110, 115))
+for _0x0053, _0x0149 in (_0x0147 and _0x0147:_0x00e5() or {}) do
+local _0x03a3 = _0x0149:_0x0062(string.char(83, 116, 97, 116, 105, 111, 110, 97, 114, 121, 78, 112, 99, 115))
+local _0x0208 = _0x03a3 and _0x03a3:_0x0062(_0x0206)
+if _0x0208 then
+for _0x0053, _0x03a4 in _0x0208:_0x03a5() do
+if _0x03a4:_0x0151(string.char(80, 114, 111, 120, 105, 109, 105, 116, 121, 80, 114, 111, 109, 112, 116)) and _0x03a4._0x0310 then
+return _0x03a4
+end
+end
+end
+end
+end
+local function _0x03af()
+local _0x03b0 = _0x002f:_0x0062(string.char(67, 65, 77))
+local _0x03b1 = _0x03b0 and _0x03b0._0x006e and _0x03b0._0x006e:_0x0062(string.char(67, 111, 109, 112, 111, 110, 101, 110, 116, 115))
+_0x03b1 = _0x03b1 and _0x03b1:_0x0062(string.char(76, 97, 121, 111, 117, 116))
+local _0x03b2 = _0x03b1 and _0x03b1:_0x0062(string.char(86, 105, 115, 105, 98, 105, 108, 105, 116, 121))
+local _0x03a8 = _0x03b2 and _0x03b2:_0x0062(string.char(80, 114, 111, 109, 112, 116, 115))
+if _0x03a8 ~= nil and _0x03a8._0x00c6 == false then
+pcall(function() _0x03a8._0x00c6 = true end)
+end
+end
+local function _0x03b5(_0x0206)
+local _0x02fa = _0x03a2(_0x0206)
+if _0x02fa == nil then
+return false, string.char(110, 111, 32, 100, 105, 97, 108, 111, 103, 117, 101, 32, 112, 114, 111, 109, 112, 116, 32, 111, 110, 32) .. tostring(_0x0206)
+end
+local _0x0209 = _0x02fa._0x0196
+if _0x0209 and _0x0209:_0x0151(string.char(66, 97, 115, 101, 80, 97, 114, 116)) then
+_0x0273(_0x0209._0x0167)
+_0x0128._0x0113(0.3)
+end
+_0x03af()
+local _0x0063 = _0x02fc(_0x02fa)
+return _0x0063 and true or false, _0x0063 and string.char(116, 97, 108, 107, 101, 100) or string.char(102, 105, 114, 101, 32, 102, 97, 105, 108, 101, 100)
+end
+local function _0x03c1()
+local _0x0332, _0x015a = {}, {}
+local _0x0207 = _0x0031:_0x0062(string.char(68, 101, 98, 114, 101, 101))
+local _0x0147 = _0x0207 and _0x0207:_0x0062(string.char(82, 101, 103, 105, 111, 110, 115))
+for _0x0053, _0x0149 in (_0x0147 and _0x0147:_0x00e5() or {}) do
+for _0x0053, _0x03c2 in _0x0149:_0x00e5() do
+if string.find(_0x03c2._0x0046, string.char(83, 112, 97, 119, 110, 67, 114, 121, 115, 116, 97, 108)) and _0x03c2:_0x0151(string.char(77, 111, 100, 101, 108)) then
+local _0x0063, _0x03c3 = pcall(function() return _0x03c2:_0x03be() end)
+if _0x0063 then
+local _0x0269 = tostring(_0x03c2:_0x03c4(string.char(83, 112, 97, 119, 110, 65, 114, 101, 97)) or _0x0149._0x0046)
+if _0x0332[_0x0269] == nil then
+_0x0332[_0x0269] = _0x03c3._0x0167
+table.insert(_0x015a, _0x0269)
+end
+end
+end
+end
+end
+table.sort(_0x015a)
+return _0x0332, _0x015a
+end
+local _0x03c5 = {
+string.char(70, 108, 97, 109, 101, 32, 84, 114, 97, 105, 110, 101, 114, 32, 82, 101, 110, 103, 117), string.char(73, 110, 115, 101, 99, 116, 32, 84, 114, 97, 105, 110, 101, 114, 32, 83, 104, 105, 110, 111, 114, 97), string.char(83, 101, 114, 112, 101, 110, 116, 32, 84, 114, 97, 105, 110, 101, 114, 32, 79, 98, 97, 114, 105),
+string.char(83, 111, 117, 110, 100, 32, 84, 114, 97, 105, 110, 101, 114, 32, 84, 101, 110, 103, 97, 105), string.char(83, 116, 111, 110, 101, 32, 84, 114, 97, 105, 110, 101, 114, 32, 71, 121, 111, 114, 101, 105), string.char(84, 104, 117, 110, 100, 101, 114, 32, 84, 114, 97, 105, 110, 101, 114, 32, 90, 101, 110, 116, 97, 114, 111),
+string.char(87, 97, 116, 101, 114, 32, 84, 114, 97, 105, 110, 101, 114, 32, 85, 114, 111, 107, 111, 100, 97, 107, 105), string.char(87, 105, 110, 100, 32, 84, 114, 97, 105, 110, 101, 114, 32, 83, 97, 110, 101, 114, 105),
 }
-
--- Trainers are StationaryNpcs, which only stream in near their region, so their
--- positions cannot all be read from one spot. Seeded with the two that were
--- reachable; the rest fill in automatically the first time one is seen.
-local TRAINER_POSITIONS = {
-	-- read live from StationaryNpcs
-	["Flame Trainer Rengu"]     = Vector3.new(-967, 1025, 1188),
-	["Serpent Trainer Obari"]   = Vector3.new(36, 1307, -1179),
-	-- supplied as CFrames; only the position component is used
-	["Insect Trainer Shinora"]  = Vector3.new(-1798.93994, 350.16803, -189.343994),
-	["Sound Trainer Tengai"]    = Vector3.new(464.881012, 1487.79883, -3272.79712),
-	["Stone Trainer Gyorei"]    = Vector3.new(2578.58301, 1091.5, -828.401001),
-	["Thunder Trainer Zentaro"] = Vector3.new(1970.1803, 1662.5, -609.810913),
-	["Water Trainer Urokodaki"] = Vector3.new(667.17395, 1021, -228.240005),
-	["Wind Trainer Saneri"]     = Vector3.new(-275.575989, 1189.98682, -3436.65308),
+local _0x03ce = {
+[string.char(70, 108, 97, 109, 101, 32, 84, 114, 97, 105, 110, 101, 114, 32, 82, 101, 110, 103, 117)]     = _0x01b9._0x01ad(-(1012 - 45), 1025, (2376 / 2)),
+[string.char(83, 101, 114, 112, 101, 110, 116, 32, 84, 114, 97, 105, 110, 101, 114, 32, 79, 98, 97, 114, 105)]   = _0x01b9._0x01ad((77 - 41), (1384 - 77), -(4716 / 4)),
+[string.char(73, 110, 115, 101, 99, 116, 32, 84, 114, 97, 105, 110, 101, 114, 32, 83, 104, 105, 110, 111, 114, 97)]  = _0x01b9._0x01ad(-1798.93994, 350.16803, -(1893.4399400000002 / 10)),
+[string.char(83, 111, 117, 110, 100, 32, 84, 114, 97, 105, 110, 101, 114, 32, 84, 101, 110, 103, 97, 105)]    = _0x01b9._0x01ad(464.881012, 1487.79883, -(1636 + 1636.7971200000002)),
+[string.char(83, 116, 111, 110, 101, 32, 84, 114, 97, 105, 110, 101, 114, 32, 71, 121, 111, 114, 101, 105)]    = _0x01b9._0x01ad(2578.58301, (545 + 546.5), -828.401001),
+[string.char(84, 104, 117, 110, 100, 101, 114, 32, 84, 114, 97, 105, 110, 101, 114, 32, 90, 101, 110, 116, 97, 114, 111)] = _0x01b9._0x01ad((985 + 985.1803), 1662.5, -(60981.0913 / 100)),
+[string.char(87, 97, 116, 101, 114, 32, 84, 114, 97, 105, 110, 101, 114, 32, 85, 114, 111, 107, 111, 100, 97, 107, 105)] = _0x01b9._0x01ad(667.17395, (1040 - 19), -(2282.40005 / 10)),
+[string.char(87, 105, 110, 100, 32, 84, 114, 97, 105, 110, 101, 114, 32, 83, 97, 110, 101, 114, 105)]     = _0x01b9._0x01ad(-275.575989, (4759.94728 / 4), -(1718 + 1718.65308)),
 }
-
--- Record any trainer currently loaded. Returns how many were newly learned.
-local function scanTrainers()
-	local learned = {}
-	for _, name in BREATHING_TRAINERS do
-		if TRAINER_POSITIONS[name] == nil then
-			local pos = findNpcAnywhere(name)
-			if pos ~= nil then
-				TRAINER_POSITIONS[name] = pos
-				table.insert(learned, name)
-			end
-		end
-	end
-	return learned
+local function _0x03d9()
+local _0x03d8 = {}
+for _0x0053, _0x0061 in _0x03c5 do
+if _0x03ce[_0x0061] == nil then
+local _0x025d = _0x0259(_0x0061)
+if _0x025d ~= nil then
+_0x03ce[_0x0061] = _0x025d
+table.insert(_0x03d8, _0x0061)
 end
-
--- Live lookup first (it may have moved), then whatever we have recorded.
-local function trainerPosition(name)
-	local pos = findNpcAnywhere(name)
-	if pos ~= nil then
-		TRAINER_POSITIONS[name] = pos
-		return pos, "live"
-	end
-
-	local known = TRAINER_POSITIONS[name]
-	if known ~= nil then
-		return known, "recorded"
-	end
-
-	return nil
 end
-
---------------------------------------------------------------------------------
--- CLAN SPIN
---------------------------------------------------------------------------------
-
--- Two remotes, in this order (verified in game):
---   SignalFunction.Function:InvokeServer("ClanSpin")  -> returns the clan NAME
---   SignalEvent.Event:FireServer("ClanSpinComplete")  -> acknowledges it
---
--- The roll applies IMMEDIATELY - data.Clan is overwritten each spin and there
--- is no claim step, so there is no safety net: one more spin replaces whatever
--- you just rolled. ClanBag stayed empty across 30 spins, so it is for
--- something else.
---
--- Rarity ladder skips 4:
---   1 Common(60%)  2 Uncommon(23%)  3 Rare(12%)
---   5 Legendary(4%)  6 Mythic(0.9%)  7 Supreme(0.1%)
-local Signals = ReplicatedStorage
-	:WaitForChild("Communication")
-	:WaitForChild("ServerAndClient")
-	:WaitForChild("Signals")
-
-local SpinFunction = Signals:WaitForChild("SignalFunction"):WaitForChild("Function")
-
-local ClansModule = nil
+end
+return _0x03d8
+end
+local function _0x03de(_0x0061)
+local _0x025d = _0x0259(_0x0061)
+if _0x025d ~= nil then
+_0x03ce[_0x0061] = _0x025d
+return _0x025d, string.char(108, 105, 118, 101)
+end
+local _0x03df = _0x03ce[_0x0061]
+if _0x03df ~= nil then
+return _0x03df, string.char(114, 101, 99, 111, 114, 100, 101, 100)
+end
+return nil
+end
+local _0x0403 = _0x002f
+:_0x0074(string.char(67, 111, 109, 109, 117, 110, 105, 99, 97, 116, 105, 111, 110))
+:_0x0074(string.char(83, 101, 114, 118, 101, 114, 65, 110, 100, 67, 108, 105, 101, 110, 116))
+:_0x0074(string.char(83, 105, 103, 110, 97, 108, 115))
+local _0x0404 = _0x0403:_0x0074(string.char(83, 105, 103, 110, 97, 108, 70, 117, 110, 99, 116, 105, 111, 110)):_0x0074(string.char(70, 117, 110, 99, 116, 105, 111, 110))
+local _0x0405 = nil
 do
-	local cam = ReplicatedStorage:FindFirstChild("CAM")
-	local node = cam and cam:FindFirstChild("Clans")
-	if node then
-		local ok, mod = pcall(require, node)
-		ClansModule = ok and mod or nil
-	end
+local _0x03b0 = _0x002f:_0x0062(string.char(67, 65, 77))
+local _0x0060 = _0x03b0 and _0x03b0:_0x0062(string.char(67, 108, 97, 110, 115))
+if _0x0060 then
+local _0x0063, _0x0064 = pcall(require, _0x0060)
+_0x0405 = _0x0063 and _0x0064 or nil
 end
-
-local SPIN_COST = 1
+end
+local _0x0406 = 1
 do
-	local ok, Clan = pcall(function()
-		return require(ReplicatedStorage.CAM.Global.Spinners.Clan)
-	end)
-	if ok and type(Clan) == "table" and type(Clan.Cost) == "number" then
-		SPIN_COST = math.max(1, Clan.Cost)
-	end
+local _0x0063, _0x03ed = pcall(function()
+return require(_0x002f._0x006c._0x0407._0x0408._0x03ed)
+end)
+if _0x0063 and type(_0x03ed) == string.char(116, 97, 98, 108, 101) and type(_0x03ed._0x0409) == string.char(110, 117, 109, 98, 101, 114) then
+_0x0406 = math.max(1, _0x03ed._0x0409)
 end
-
-local RARITY_LABELS = {
-	["1 Common"] = 1, ["2 Uncommon"] = 2, ["3 Rare"] = 3,
-	["5 Legendary"] = 5, ["6 Mythic"] = 6, ["7 Supreme"] = 7,
+end
+local _0x040a = {
+[string.char(49, 32, 67, 111, 109, 109, 111, 110)] = 1, [string.char(50, 32, 85, 110, 99, 111, 109, 109, 111, 110)] = 2, [string.char(51, 32, 82, 97, 114, 101)] = 3,
+[string.char(40, 50, 32, 43, 32, 51, 41, 32, 76, 101, 103, 101, 110, 100, 97, 114, 121)] = 5, [string.char(40, 49, 50, 32, 47, 32, 50, 41, 32, 77, 121, 116, 104, 105, 99)] = (3 + 3), [string.char(40, 57, 48, 32, 45, 32, 56, 51, 41, 32, 83, 117, 112, 114, 101, 109, 101)] = 7,
 }
-local RARITY_ORDER = { "1 Common", "2 Uncommon", "3 Rare", "5 Legendary", "6 Mythic", "7 Supreme" }
-
-local autoSpin       = false
-local spinMinRarity  = 5          -- stop at Legendary or better
-local spinStatus     = "off"
-local spinLast       = "-"
-
-local function spinningFolder()
-	local data = playerData()
-	return data and data:FindFirstChild("Spinning") or nil
+local _0x040b = { string.char(49, 32, 67, 111, 109, 109, 111, 110), string.char(50, 32, 85, 110, 99, 111, 109, 109, 111, 110), string.char(51, 32, 82, 97, 114, 101), string.char(53, 32, 76, 101, 103, 101, 110, 100, 97, 114, 121), string.char(40, 51, 32, 43, 32, 51, 41, 32, 77, 121, 116, 104, 105, 99), string.char(55, 32, 83, 117, 112, 114, 101, 109, 101) }
+local _0x040c       = false
+local _0x040d  = 5
+local _0x040f     = string.char(111, 102, 102)
+local _0x0410       = string.char(45)
+local function _0x0411()
+local _0x01bf = _0x0325()
+return _0x01bf and _0x01bf:_0x0062(string.char(83, 112, 105, 110, 110, 105, 110, 103)) or nil
 end
-
-local function spinsLeft()
-	local sp = spinningFolder()
-	local paid = sp and sp:FindFirstChild("Spins")
-	local free = sp and sp:FindFirstChild("FreeClanSpins")
-	return (paid and paid.Value or 0) + (free and free.Value or 0)
+local function _0x0412()
+local _0x0413 = _0x0411()
+local _0x0414 = _0x0413 and _0x0413:_0x0062(string.char(83, 112, 105, 110, 115))
+local _0x0415 = _0x0413 and _0x0413:_0x0062(string.char(70, 114, 101, 101, 67, 108, 97, 110, 83, 112, 105, 110, 115))
+return (_0x0414 and _0x0414._0x00c6 or 0) + (_0x0415 and _0x0415._0x00c6 or 0)
 end
-
-local function currentClan()
-	local data = playerData()
-	local c = data and data:FindFirstChild("Clan")
-	return c and tostring(c.Value) or "?"
+local function _0x0416()
+local _0x01bf = _0x0325()
+local _0x03c2 = _0x01bf and _0x01bf:_0x0062(string.char(67, 108, 97, 110))
+return _0x03c2 and tostring(_0x03c2._0x00c6) or string.char(63)
 end
-
--- name -> rarity number, label
-local function clanTier(name)
-	if ClansModule == nil or type(ClansModule.TierOf) ~= "function" then
-		return 0, "?"
-	end
-	local ok, t = pcall(ClansModule.TierOf, name)
-	if ok and type(t) == "table" then
-		return tonumber(t.rarity) or 0, tostring(t.name)
-	end
-	return 0, "?"
+local function _0x0418(_0x0061)
+if _0x0405 == nil or type(_0x0405._0x0419) ~= string.char(102, 117, 110, 99, 116, 105, 111, 110) then
+return 0, string.char(63)
 end
-
--- One spin. Returns ok, clanName, rarity, label.
-local function spinOnce()
-	local ok, result = pcall(function()
-		return SpinFunction:InvokeServer("ClanSpin")
-	end)
-
-	if not ok then
-		return false, tostring(result)
-	end
-
-	pcall(function()
-		Event:FireServer("ClanSpinComplete")
-	end)
-
-	local name = tostring(result)
-	local rarity, label = clanTier(name)
-
-	-- The invoke returns the clan name directly; fall back to live data if not.
-	if rarity == 0 then
-		name = currentClan()
-		rarity, label = clanTier(name)
-	end
-
-	return true, name, rarity, label
+local _0x0063, _0x01d0 = pcall(_0x0405._0x0419, _0x0061)
+if _0x0063 and type(_0x01d0) == string.char(116, 97, 98, 108, 101) then
+return tonumber(_0x01d0._0x0417) or 0, tostring(_0x01d0._0x0061)
 end
-
-task.spawn(function()
-	local stalls = 0
-
-	while true do
-		if Fluent.Unloaded then break end
-
-		if autoSpin then
-			local before = spinsLeft()
-
-			if before < SPIN_COST then
-				spinStatus = "out of spins"
-				autoSpin = false
-			else
-				local ok, name, rarity, label = spinOnce()
-
-				if not ok then
-					spinStatus = "invoke failed: " .. tostring(name)
-					autoSpin = false
-				else
-					spinLast = name .. " [" .. tostring(label) .. "]"
-					spinStatus = string.format("%d left - last %s", spinsLeft(), spinLast)
-
-					if rarity >= spinMinRarity then
-						spinStatus = "FOUND " .. spinLast .. " - stopped"
-						autoSpin = false
-					elseif spinsLeft() >= before then
-						-- count never dropped: something is refusing
-						stalls = stalls + 1
-						if stalls >= 3 then
-							spinStatus = "spin count never dropped - stopped"
-							autoSpin = false
-						end
-					else
-						stalls = 0
-					end
-				end
-			end
-
-			task.wait(0.35)
-		else
-			task.wait(0.4)
-		end
-	end
+return 0, string.char(63)
+end
+local function _0x041b()
+local _0x0063, _0x0119 = pcall(function()
+return _0x0404:_0x03e6(string.char(67, 108, 97, 110, 83, 112, 105, 110))
 end)
-
---------------------------------------------------------------------------------
--- UI
---------------------------------------------------------------------------------
-
--- Read the live tree BEFORE building UI, then restore identity once.
-local regionNamesCached = regionNames()
-local npcNamesCached    = npcNames()
-local questKeysCached   = questKeys()
-local combatItemsCached = combatItems()
-raiseIdentity()
-
-local Window = Fluent:CreateWindow({
-	Title = "amitoofast",
-	SubTitle = "powered by DEXAI & donut",
-	TabWidth = 150,
-	Size = UDim2.fromOffset(560, 440),
-	Acrylic = false,  -- blur can be detectable; off by default
-	Theme = "Dark",
-	MinimizeKey = Enum.KeyCode.RightControl,
+if not _0x0063 then
+return false, tostring(_0x0119)
+end
+pcall(function()
+_0x0073:_0x00b5(string.char(67, 108, 97, 110, 83, 112, 105, 110, 67, 111, 109, 112, 108, 101, 116, 101))
+end)
+local _0x0061 = tostring(_0x0119)
+local _0x0417, _0x0269 = _0x0418(_0x0061)
+if _0x0417 == 0 then
+_0x0061 = _0x0416()
+_0x0417, _0x0269 = _0x0418(_0x0061)
+end
+return true, _0x0061, _0x0417, _0x0269
+end
+_0x0128._0x0129(function()
+local _0x02b6 = 0
+while true do
+if _0x003c._0x012a then break end
+if _0x040c then
+local _0x0042 = _0x0412()
+if _0x0042 < _0x0406 then
+_0x040f = string.char(111, 117, 116, 32, 111, 102, 32, 115, 112, 105, 110, 115)
+_0x040c = false
+else
+local _0x0063, _0x0061, _0x0417, _0x0269 = _0x041b()
+if not _0x0063 then
+_0x040f = string.char(105, 110, 118, 111, 107, 101, 32, 102, 97, 105, 108, 101, 100, 58, 32) .. tostring(_0x0061)
+_0x040c = false
+else
+_0x0410 = _0x0061 .. string.char(32, 91) .. tostring(_0x0269) .. string.char(93)
+_0x040f = string.format(string.char(37, 100, 32, 108, 101, 102, 116, 32, 45, 32, 108, 97, 115, 116, 32, 37, 115), _0x0412(), _0x0410)
+if _0x0417 >= _0x040d then
+_0x040f = string.char(70, 79, 85, 78, 68, 32) .. _0x0410 .. string.char(32, 45, 32, 115, 116, 111, 112, 112, 101, 100)
+_0x040c = false
+elseif _0x0412() >= _0x0042 then
+_0x02b6 = _0x02b6 + 1
+if _0x02b6 >= 3 then
+_0x040f = string.char(115, 112, 105, 110, 32, 99, 111, 117, 110, 116, 32, 110, 101, 118, 101, 114, 32, 100, 114, 111, 112, 112, 101, 100, 32, 45, 32, 115, 116, 111, 112, 112, 101, 100)
+_0x040c = false
+end
+else
+_0x02b6 = 0
+end
+end
+end
+_0x0128._0x0113(0.35)
+else
+_0x0128._0x0113(0.4)
+end
+end
+end)
+local _0x0425 = _0x0148()
+local _0x0426    = _0x014e()
+local _0x0427   = _0x01da()
+local _0x0428 = _0x0348()
+_0x004a()
+local _0x0429 = _0x003c:_0x042a({
+_0x042b = string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116),
+_0x042c = string.char(112, 111, 119, 101, 114, 101, 100, 32, 98, 121, 32, 68, 69, 88, 65, 73, 32, 38, 32, 100, 111, 110, 117, 116),
+_0x042d = (75 + 75),
+_0x042e = _0x042f._0x0430(560, (476 - 36)),
+_0x0431 = false,
+_0x0434 = string.char(68, 97, 114, 107),
+_0x0435 = _0x035d._0x035e._0x0436,
 })
-
-local Tabs = {
-	Combat   = Window:AddTab({ Title = "Combat",   Icon = "swords" }),
-	Position = Window:AddTab({ Title = "Position", Icon = "crosshair" }),
-	Quest    = Window:AddTab({ Title = "Quest",    Icon = "scroll-text" }),
-	Loot     = Window:AddTab({ Title = "Loot",     Icon = "package" }),
-	Equip    = Window:AddTab({ Title = "Equip",    Icon = "shirt" }),
-	Travel   = Window:AddTab({ Title = "Travel",   Icon = "map" }),
-	Spin     = Window:AddTab({ Title = "Spin",     Icon = "dices" }),
-	Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
+local _0x0437 = {
+_0x0438   = _0x0429:_0x0439({ _0x042b = string.char(67, 111, 109, 98, 97, 116),   _0x043a = string.char(115, 119, 111, 114, 100, 115) }),
+_0x0167 = _0x0429:_0x0439({ _0x042b = string.char(80, 111, 115, 105, 116, 105, 111, 110), _0x043a = string.char(99, 114, 111, 115, 115, 104, 97, 105, 114) }),
+_0x01fa    = _0x0429:_0x0439({ _0x042b = string.char(81, 117, 101, 115, 116),    _0x043a = string.char(115, 99, 114, 111, 108, 108, 45, 116, 101, 120, 116) }),
+_0x043b     = _0x0429:_0x0439({ _0x042b = string.char(76, 111, 111, 116),     _0x043a = string.char(112, 97, 99, 107, 97, 103, 101) }),
+_0x0297    = _0x0429:_0x0439({ _0x042b = string.char(69, 113, 117, 105, 112),    _0x043a = string.char(115, 104, 105, 114, 116) }),
+_0x043c   = _0x0429:_0x0439({ _0x042b = string.char(84, 114, 97, 118, 101, 108),   _0x043a = string.char(109, 97, 112) }),
+_0x043d     = _0x0429:_0x0439({ _0x042b = string.char(83, 112, 105, 110),     _0x043a = string.char(100, 105, 99, 101, 115) }),
+_0x043e = _0x0429:_0x0439({ _0x042b = string.char(83, 101, 116, 116, 105, 110, 103, 115), _0x043a = string.char(115, 101, 116, 116, 105, 110, 103, 115) }),
 }
-
--- Combat ----------------------------------------------------------------------
-
--- One switch for the whole farm loop: hold position behind the target AND
--- run the combo. Keeping these separate meant two clicks for the only
--- combination that is actually useful.
-local farmToggle = Tabs.Combat:AddToggle("AutoFarm", {
-	Title = "Auto Farm",
-	Description = "Teleports behind the nearest selected enemy and runs the combo",
-	Default = false,
+local _0x044a = _0x0437._0x0438:_0x044b(string.char(65, 117, 116, 111, 70, 97, 114, 109), {
+_0x042b = string.char(65, 117, 116, 111, 32, 70, 97, 114, 109),
+_0x044c = string.char(84, 101, 108, 101, 112, 111, 114, 116, 115, 32, 98, 101, 104, 105, 110, 100, 32, 116, 104, 101, 32, 110, 101, 97, 114, 101, 115, 116, 32, 115, 101, 108, 101, 99, 116, 101, 100, 32, 101, 110, 101, 109, 121, 32, 97, 110, 100, 32, 114, 117, 110, 115, 32, 116, 104, 101, 32, 99, 111, 109, 98, 111),
+_0x044d = false,
 })
-
-farmToggle:OnChanged(function(value)
-	autoPunch = value
-	behindOn  = value
-	if not value then
-		target, targetRoot = nil, nil
-	end
-end)
-
--- One click: accept -> travel -> fight -> loot -> repeat.
-local autoAllToggle = Tabs.Combat:AddToggle("AutoAll", {
-	Title = "AUTO FARM (smart)",
-	Description = "Accepts a quest, travels to it, kills what it needs, loots, repeats",
-	Default = false,
-})
-
-autoAllToggle:OnChanged(function(value)
-	autoAll = value
-	if not value then
-		-- hand control back rather than leaving the sub-toggles stuck on
-		autoPunch, behindOn, lootOn, questFarm = false, false, false, false
-		autoWeapon = false
-		target, targetRoot = nil, nil
-	end
-end)
-
-local autoPickToggle = Tabs.Combat:AddToggle("AutoPickQuest", {
-	Title = "Pick quests automatically",
-	Description = "Works down the quest list by level, using the game's own CanAddQuest",
-	Default = true,
-})
-
-autoPickToggle:OnChanged(function(value)
-	autoPickQuest = value
-end)
-
-local combatOnlyToggle = Tabs.Combat:AddToggle("CombatQuestsOnly", {
-	Title = "Kill quests only",
-	Description = "Skip fetch, delivery and fishing quests - nothing automates those",
-	Default = true,
-})
-
-combatOnlyToggle:OnChanged(function(value)
-	combatQuestsOnly = value
-	questPlanCache = nil
-end)
-
-local questFarmToggle = Tabs.Combat:AddToggle("AutoFarmQuest", {
-	Title = "Auto Farm Quest",
-	Description = "Overrides the target list with whatever your quest needs",
-	Default = false,
-})
-
-questFarmToggle:OnChanged(function(value)
-	questFarm = value
-	target, targetRoot = nil, nil
-end)
-
--- Turns a silent no-op into a visible reason. "no combat equipped" is the one
--- that bites - nothing else in the game reports it.
--- Position ----------------------------------------------------------------------
-
--- The on/off switch lives on the Combat tab as "Auto Farm"; these are its
--- settings.
-local regionDropdown = Tabs.Position:AddDropdown("Region", {
-	Title = "Region",
-	Values = regionNamesCached,
-	Multi = false,
-	Default = 1,
-})
-
-regionDropdown:SetValue(behindRegion)
-
-local targetDropdown = Tabs.Position:AddDropdown("Target", {
-	Title = "Targets",
-	Description = "Pick any number. None = nearest of anything. Ignored while Auto Farm Quest is on.",
-	Values = npcNamesCached,
-	Multi = true,
-	Default = {},
-})
-
-regionDropdown:OnChanged(function(value)
-	behindRegion = value
-	target, targetRoot = nil, nil
-	-- NPC names are per-region, so refresh the list and drop stale picks.
-	local names = npcNames()
-	raiseIdentity()
-	targetDropdown:SetValues(names)
-	behindTargets = {}
-end)
-
--- Multi dropdowns hand back a SET: { ["Bandit"] = true }. Copy it rather than
--- aliasing, since Fluent reuses its own table.
-targetDropdown:OnChanged(function(value)
-	local picked = {}
-	if type(value) == "table" then
-		for name, on in pairs(value) do
-			if on then
-				picked[name] = true
-			end
-		end
-	end
-	behindTargets = picked
-	target, targetRoot = nil, nil
-end)
-
--- OnChanged fires on registration, so set the default after wiring it up.
-if table.find(npcNamesCached, "*Civilian*") then
-	targetDropdown:SetValue({ ["*Civilian*"] = true })
+_0x044a:_0x044e(function(_0x0118)
+_0x0127 = _0x0118
+_0x0130  = _0x0118
+if not _0x0118 then
+_0x008b, _0x0169 = nil, nil
 end
-
-Tabs.Position:AddButton({
-	Title = "Rescan NPCs",
-	Description = "Reload the target list from the current region",
-	Callback = function()
-		local names = npcNames()
-		raiseIdentity()
-		targetDropdown:SetValues(names)
-		Fluent:Notify({ Title = "amitoofast", Content = "NPC list refreshed", Duration = 3 })
-	end,
-})
-
-local avoidToggle = Tabs.Position:AddToggle("AvoidShield", {
-	Title = "Avoid shield",
-	Description = "Back off and stop swinging while the target is blocking",
-	Default = true,
-})
-
-avoidToggle:OnChanged(function(value)
-	avoidShield = value
-	if not value then
-		targetShielded = false
-	end
 end)
-
-local dodgeToggle = Tabs.Position:AddToggle("DodgeOnHit", {
-	Title = "Dodge when hit",
-	Description = "Swing round to a new angle after taking damage",
-	Default = true,
+local _0x0451 = _0x0437._0x0438:_0x044b(string.char(65, 117, 116, 111, 65, 108, 108), {
+_0x042b = string.char(65, 85, 84, 79, 32, 70, 65, 82, 77, 32, 40, 115, 109, 97, 114, 116, 41),
+_0x044c = string.char(65, 99, 99, 101, 112, 116, 115, 32, 97, 32, 113, 117, 101, 115, 116, 44, 32, 116, 114, 97, 118, 101, 108, 115, 32, 116, 111, 32, 105, 116, 44, 32, 107, 105, 108, 108, 115, 32, 119, 104, 97, 116, 32, 105, 116, 32, 110, 101, 101, 100, 115, 44, 32, 108, 111, 111, 116, 115, 44, 32, 114, 101, 112, 101, 97, 116, 115),
+_0x044d = false,
 })
-
-dodgeToggle:OnChanged(function(value)
-	dodgeOnHit = value
-	if not value then
-		dodgeUntil = 0
-	end
-end)
-
-local dodgeStudsSlider = Tabs.Position:AddSlider("DodgeStuds", {
-	Title = "Dodge distance",
-	Default = 12,
-	Min = 0,
-	Max = 40,
-	Rounding = 0,
-})
-
-dodgeStudsSlider:OnChanged(function(value)
-	dodgeStuds = value
-end)
-
-local dodgeTimeSlider = Tabs.Position:AddSlider("DodgeTime", {
-	Title = "Dodge time",
-	Description = "Seconds to stay off after a hit",
-	Default = 1,
-	Min = 0,
-	Max = 5,
-	Rounding = 1,
-})
-
-dodgeTimeSlider:OnChanged(function(value)
-	dodgeTime = value
-end)
-
-local avoidSlider = Tabs.Position:AddSlider("AvoidDistance", {
-	Title = "Back off by",
-	Description = "Extra studs to retreat while they block",
-	Default = 10,
-	Min = 0,
-	Max = 40,
-	Rounding = 0,
-})
-
-avoidSlider:OnChanged(function(value)
-	avoidDistance = value
-end)
-
-local distanceSlider = Tabs.Position:AddSlider("BehindDistance", {
-	Title = "Distance",
-	Description = "Studs behind the target",
-	Default = behindDistance,
-	Min = 1,
-	Max = 15,
-	Rounding = 1,
-})
-
-distanceSlider:OnChanged(function(value)
-	behindDistance = value
-end)
-
-local heightSlider = Tabs.Position:AddSlider("BehindHeight", {
-	Title = "Height",
-	Default = behindHeight,
-	Min = -10,
-	Max = 10,
-	Rounding = 1,
-})
-
-heightSlider:OnChanged(function(value)
-	behindHeight = value
-end)
-
--- Quest -------------------------------------------------------------------------
-
--- Static placeholder on purpose: calling questLines() here would run game
--- code mid-constructor and strip the capabilities Fluent needs. The refresh
--- loop below fills it in a moment later.
-Tabs.Quest:AddButton({
-	Title = "Refresh now",
-	Callback = function()
-		local text = questLines()
-		raiseIdentity()
-	end,
-})
-
-local selectedQuest = questKeysCached[1]
-
-local questDropdown = Tabs.Quest:AddDropdown("QuestPick", {
-	Title = "Quest",
-	Description = #questKeysCached .. " available - the (Lv n) suffix is its level gate",
-	Values = questKeysCached,
-	Multi = false,
-	Default = 1,
-})
-
-questDropdown:OnChanged(function(value)
-	selectedQuest = value
-end)
-
-Tabs.Quest:AddButton({
-	Title = "Accept selected quest",
-	Description = "Runs the game's own gates and reports the refusal reason",
-	Callback = function()
-		if selectedQuest == nil then
-			return
-		end
-
-		local ok, reason = acceptQuest(selectedQuest)
-		raiseIdentity()
-
-		Fluent:Notify({
-			Title = ok and "Quest accepted" or "Refused",
-			Content = selectedQuest,
-			SubContent = (not ok) and tostring(reason) or nil,
-			Duration = 6,
-		})
-	end,
-})
-
-local autoQuestToggle = Tabs.Quest:AddToggle("AutoQuest", {
-	Title = "Auto Accept",
-	Description = "Re-accepts the selected quest whenever you have none",
-	Default = false,
-})
-
-local autoQuest = false
-autoQuestToggle:OnChanged(function(value)
-	autoQuest = value
-end)
-
-local tpToGiverToggle = Tabs.Quest:AddToggle("TpToGiver", {
-	Title = "Teleport to giver first",
-	Description = "The server refuses an accept unless you are near the OfferNpc",
-	Default = true,
-})
-
-tpToGiverToggle:OnChanged(function(value)
-	tpToGiver = value
-end)
-
-Tabs.Quest:AddButton({
-	Title = "Teleport to giver",
-	Description = "Stationary NPC that offers the selected quest",
-	Callback = function()
-		local npc = questGiverName(selectedQuest)
-		local pos, region = findGiver(npc)
-		local ok = teleportTo(pos)
-		raiseIdentity()
-
-		local content
-		if npc == nil then
-			content = "this quest names no OfferNpc"
-		elseif pos == nil then
-			content = "couldn't find " .. npc .. " in any StationaryNpcs"
-		elseif not ok then
-			content = "no character to move"
-		else
-			content = npc .. " (" .. tostring(region) .. ")"
-		end
-
-		Fluent:Notify({ Title = "Teleport", Content = content, Duration = 5 })
-	end,
-})
-
-Tabs.Quest:AddButton({
-	Title = "Talk to giver (press T)",
-	Description = "Fires the NPC's Dialogue prompt - use it to hand a quest in",
-	Callback = function()
-		local heldKey = activeQuestKey()
-		local giver = questGiverName(heldKey or selectedQuest)
-		local ok, why = talkTo(giver)
-		raiseIdentity()
-
-		Fluent:Notify({
-			Title = ok and "Talked" or "Failed",
-			Content = tostring(giver or "no giver"),
-			SubContent = tostring(why),
-			Duration = 5,
-		})
-	end,
-})
-
-Tabs.Quest:AddButton({
-	Title = "Teleport to objective",
-	Description = "Uses the quest you are holding; falls back to the dropdown",
-	Callback = function()
-		-- The quest you hold matters more than whatever the dropdown shows.
-		local pos, which, source = activeObjective()
-		if pos == nil then
-			pos, source = questWaypoint(selectedQuest)
-			which = selectedQuest
-		end
-
-		local ok = teleportTo(pos)
-		raiseIdentity()
-
-		local content
-		if pos == nil then
-			content = "no Position on " .. tostring(which or selectedQuest)
-		elseif not ok then
-			content = "no character to move"
-		else
-			content = tostring(which)
-		end
-
-		Fluent:Notify({
-			Title = "Teleport",
-			Content = content,
-			SubContent = (pos ~= nil) and tostring(source) or nil,
-			Duration = 5,
-		})
-	end,
-})
-
--- Max is 1 quest with a 30s cooldown, so this waits rather than spamming.
---
--- AddQuest passing its CLIENT gates does not mean the server granted it: the
--- server also checks you are near the OfferNpc. So teleport first when asked,
--- then verify the quest actually landed in Holder instead of trusting the
--- return value - otherwise this re-fires the remote every second forever.
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-
-		if autoQuest and selectedQuest ~= nil then
-			local active = activeQuestCount()
-			local maxQuests = (QuestsModule and QuestsModule.MaxQuestsPerPlayer) or 1
-
-			if active >= maxQuests then
-				questStatus = "have a quest"
-				task.wait(1)
-			else
-				local left = questCooldownLeft()
-				if left > 0 then
-					questStatus = string.format("cooldown %ds", math.ceil(left))
-					task.wait(math.min(left, 5))
-				else
-					if tpToGiver then
-						local pos = findGiver(questGiverName(selectedQuest))
-						if pos ~= nil then
-							teleportTo(pos)
-							task.wait(0.4)
-						end
-					end
-
-					local before = activeQuestCount()
-					local ok, reason = acceptQuest(selectedQuest)
-
-					if not ok then
-						questStatus = "refused: " .. tostring(reason)
-						raiseIdentity()
-						task.wait(3)
-					else
-						-- Wait for the server, not the client's opinion.
-						local deadline = os_clock() + 2
-						repeat
-							task.wait(0.1)
-						until activeQuestCount() > before or os_clock() > deadline
-
-						raiseIdentity()
-
-						if activeQuestCount() > before then
-							questStatus = "accepted " .. selectedQuest
-							task.wait(1)
-						else
-							questStatus = "fired but not granted - too far from " ..
-								tostring(questGiverName(selectedQuest) or "the giver") .. "?"
-							task.wait(5)
-						end
-					end
-				end
-			end
-		else
-			questStatus = autoQuest and "no quest selected" or "off"
-			task.wait(0.5)
-		end
-	end
-end)
-
--- Master loop ----------------------------------------------------------------------
---
--- Defined here, after the Quest tab, because it needs selectedQuest. It owns
--- the other toggles while running: flipping them by hand is pointless until
--- AUTO FARM is switched off.
-task.spawn(function()
-	local lastTravel = 0
-
-	while true do
-		if Fluent.Unloaded then break end
-
-		if not autoAll then
-			task.wait(0.5)
-		else
-			-- these stay on for the whole run
-			lootOn = true
-			questFarm = true
-			autoWeapon = true
-
-			-- Nothing drawn means the combat preset resolves to nothing and the
-			-- whole farm silently does nothing, so fix it before anything else.
-			if not weaponDrawn() then
-				local slots = toolbarSlots()
-				if toolbarItem ~= nil and toolbarItem ~= "<none>"
-					and (slots[toolbarSlot] or 0) == 0 then
-					pcall(toolbarEquip, toolbarItem, toolbarSlot)
-				end
-				pcall(pressSlotKey, toolbarSlot)
-				raiseIdentity()
-			end
-
-			local active = activeQuestCount()
-
-			if active == 0 then
-				-- No quest: stop swinging, go get one.
-				autoPunch, behindOn = false, false
-
-				local left = questCooldownLeft()
-				if left > 0 then
-					autoAllStatus = string.format("quest cooldown %ds", math.ceil(left))
-					task.wait(math.min(left, 5))
-				else
-					-- Pick for ourselves unless the user pinned one.
-					local questKey = selectedQuest
-					if autoPickQuest then
-						local nextKey = nextEligibleQuest()
-						if nextKey ~= nil then
-							questKey = nextKey
-						end
-					end
-
-					-- No `continue` here: it is Luau-only and Lua 5.1 parsers
-					-- (obfuscators, linters) read it as an identifier and fail
-					-- with "'=' expected". Plain if/else works everywhere.
-					if questKey == nil then
-						autoAllStatus = "nothing eligible - check level / givers nearby"
-						task.wait(3)
-					else
-					selectedQuest = questKey
-					local giver = questGiverName(selectedQuest)
-					local pos = findGiver(giver)
-					if pos ~= nil then
-						teleportTo(pos)
-						task.wait(0.5)
-					end
-
-					local before = activeQuestCount()
-					local ok, reason = acceptQuest(selectedQuest)
-
-					if not ok then
-						autoAllStatus = "refused: " .. tostring(reason)
-						task.wait(3)
-					else
-						local deadline = os_clock() + 2
-						repeat
-							task.wait(0.1)
-						until activeQuestCount() > before or os_clock() > deadline
-
-						if activeQuestCount() > before then
-							autoAllStatus = "accepted " .. tostring(selectedQuest)
-							lastTravel = 0
-						else
-							autoAllStatus = "not granted - too far from " .. tostring(giver or "giver")
-							task.wait(4)
-						end
-					end
-					end
-				end
-
-			elseif allTasksComplete() then
-				-- Objective done: walk up and press T on the giver to hand in.
-				autoPunch, behindOn = false, false
-
-				local heldKey = activeQuestKey()
-				local giver = questGiverName(heldKey or selectedQuest)
-
-				if os_clock() - lastTravel > 4 then
-					local ok, why = talkTo(giver)
-					lastTravel = os_clock()
-					autoAllStatus = "turning in at " .. tostring(giver or "?")
-						.. " - " .. tostring(why)
-				end
-
-				task.wait(2)
-
-			else
-				-- Have a quest with work left: fight what it needs.
-				autoPunch, behindOn = true, true
-
-				if not targetValid() then
-					-- Nothing in range. Travel to the objective, but not more
-					-- than once every few seconds or it fights the behind-TP.
-					if os_clock() - lastTravel > 5 then
-						local pos, which = activeObjective()
-						if pos ~= nil then
-							teleportTo(pos)
-							lastTravel = os_clock()
-							autoAllStatus = "travelling to " .. tostring(which)
-						else
-							autoAllStatus = "no objective position - fighting where you stand"
-						end
-					end
-				else
-					autoAllStatus = "farming: " .. tostring(questFarmStatus)
-				end
-			end
-
-			task.wait(1)
-		end
-	end
-end)
-
--- Loot ----------------------------------------------------------------------------
-
-local lootToggle = Tabs.Loot:AddToggle("AutoLoot", {
-	Title = "Auto Loot",
-	Description = "Fires every LootDropPrompt under Workspace.LootDrops",
-	Default = false,
-})
-
-lootToggle:OnChanged(function(value)
-	lootOn = value
-end)
-
-local lootRangeSlider = Tabs.Loot:AddSlider("LootRange", {
-	Title = "Range",
-	Description = "0 = ignore distance (fireproximityprompt bypasses it anyway)",
-	Default = 0,
-	Min = 0,
-	Max = 200,
-	Rounding = 0,
-})
-
-lootRangeSlider:OnChanged(function(value)
-	lootRange = value
-end)
-
-Tabs.Loot:AddButton({
-	Title = "Loot once",
-	Callback = function()
-		local n = lootOnce()
-		raiseIdentity()
-		Fluent:Notify({
-			Title = "Loot",
-			Content = n > 0 and ("fired " .. n .. " prompt(s)") or "nothing on the ground",
-			Duration = 4,
-		})
-	end,
-})
-
--- Equip ---------------------------------------------------------------------------
-
-toolbarItem = combatItemsCached[1]
-toolbarSlot = "One"
-
-local toolbarItemDropdown = Tabs.Equip:AddDropdown("ToolbarItem", {
-	Title = "Weapon / style",
-	Description = "Inventory items flagged HasCombat",
-	Values = combatItemsCached,
-	Multi = false,
-	Default = 1,
-})
-
-toolbarItemDropdown:OnChanged(function(value)
-	toolbarItem = value
-end)
-
-local toolbarSlotDropdown = Tabs.Equip:AddDropdown("ToolbarSlot", {
-	Title = "Toolbar slot",
-	Values = TOOLBAR_SLOTS,
-	Multi = false,
-	Default = 1,
-})
-
-toolbarSlotDropdown:OnChanged(function(value)
-	toolbarSlot = value
-end)
-
-local autoWeaponToggle = Tabs.Equip:AddToggle("AutoEquipWeapon", {
-	Title = "Auto equip weapon",
-	Description = "Re-equips the selection below whenever that slot empties",
-	Default = false,
-})
-
-autoWeaponToggle:OnChanged(function(value)
-	autoWeapon = value
-end)
-
--- Without a weapon in the toolbar the combat preset resolves to nothing and
--- the farm silently does nothing, so this is worth having on.
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-
-		if autoWeapon and toolbarItem ~= nil and toolbarItem ~= "<none>" then
-			local slots = toolbarSlots()
-			if (slots[toolbarSlot] or 0) == 0 then
-				-- slot emptied (death, swap, rejoin)
-				pcall(toolbarEquip, toolbarItem, toolbarSlot)
-				raiseIdentity()
-			elseif not weaponDrawn() then
-				-- in the slot but sheathed; press its number key to draw it
-				pcall(pressSlotKey, toolbarSlot)
-				raiseIdentity()
-			end
-		end
-
-		task.wait(5)
-	end
-end)
-
-Tabs.Equip:AddButton({
-	Title = "Equip to toolbar",
-	Description = "Toolbar_Equip, then presses the slot key to draw it",
-	Callback = function()
-		local ok, reason = toolbarEquip(toolbarItem, toolbarSlot)
-		if ok then
-			pressSlotKey(toolbarSlot)
-			task.wait(0.3)
-		end
-		raiseIdentity()
-		Fluent:Notify({
-			Title = ok and "Equipped" or "Failed",
-			Content = tostring(toolbarItem) .. " -> " .. toolbarSlot,
-			SubContent = (not ok) and tostring(reason) or nil,
-			Duration = 5,
-		})
-	end,
-})
-
--- Category is fixed to Stats: that is where stat-bearing accessories go.
--- Vanity slots are cosmetic and nothing there is ranked.
-local equipCategory = "Stats"
-local equipMode     = "balanced"
-
-local modeDropdown = Tabs.Equip:AddDropdown("EquipMode", {
-	Title = "Best mode",
-	Description = "How stats are weighted when ranking - the weights are tunable guesses",
-	Values = { "balanced", "damage", "tank", "stamina", "speed" },
-	Multi = false,
-	Default = 1,
-})
-
-modeDropdown:OnChanged(function(value)
-	equipMode = value
-end)
-
-Tabs.Equip:AddButton({
-	Title = "Equip best (preview)",
-	Description = "Ranks and reports without firing anything",
-	Callback = function()
-		local report = equipBest(equipMode, equipCategory, true)
-		raiseIdentity()
-		Fluent:Notify({
-			Title = "Equip best - preview",
-			Content = report.note or (#report.equipped .. " change(s)"),
-			SubContent = #report.equipped > 0 and table.concat(report.equipped, ", ") or nil,
-			Duration = 7,
-		})
-	end,
-})
-
-Tabs.Equip:AddButton({
-	Title = "Equip best",
-	Callback = function()
-		local report = equipBest(equipMode, equipCategory, false)
-		raiseIdentity()
-		Fluent:Notify({
-			Title = "Equip best",
-			Content = report.note or (#report.equipped .. " equipped, " .. #report.failed .. " failed"),
-			SubContent = #report.equipped > 0 and table.concat(report.equipped, ", ") or nil,
-			Duration = 7,
-		})
-	end,
-})
-
-
--- Trainers only stream in with their region, so keep learning their
--- positions in the background.
-task.spawn(function()
-	while true do
-		if Fluent.Unloaded then break end
-		pcall(scanTrainers)
-		raiseIdentity()
-		task.wait(5)
-	end
-end)
-
--- Travel --------------------------------------------------------------------------
-
-local hubPositions, hubOrder = regionHubs()
-raiseIdentity()
-
-local selectedHub = hubOrder[1]
-
-local hubDropdown = Tabs.Travel:AddDropdown("TravelRegion", {
-	Title = "Region",
-	Values = hubOrder,
-	Multi = false,
-	Default = 1,
-})
-
-hubDropdown:OnChanged(function(value)
-	selectedHub = value
-end)
-
-Tabs.Travel:AddButton({
-	Title = "Teleport to region",
-	Callback = function()
-		local pos = hubPositions[selectedHub]
-		local ok = teleportTo(pos)
-		raiseIdentity()
-		Fluent:Notify({
-			Title = "Travel",
-			Content = pos == nil and "unknown region" or (ok and tostring(selectedHub) or "no character"),
-			Duration = 4,
-		})
-	end,
-})
-
-local selectedTrainer = BREATHING_TRAINERS[1]
-
-local trainerDropdown = Tabs.Travel:AddDropdown("TravelTrainer", {
-	Title = "Breathing trainer",
-	Values = BREATHING_TRAINERS,
-	Multi = false,
-	Default = 1,
-})
-
-trainerDropdown:OnChanged(function(value)
-	selectedTrainer = value
-end)
-
-Tabs.Travel:AddButton({
-	Title = "Teleport to trainer",
-	Description = "Only works once that trainer\'s region has streamed in",
-	Callback = function()
-		local pos, source = trainerPosition(selectedTrainer)
-		local ok = teleportTo(pos)
-		raiseIdentity()
-
-		local content
-		if pos == nil then
-			content = selectedTrainer .. " is not loaded - teleport to its region first"
-		elseif not ok then
-			content = "no character to move"
-		else
-			content = selectedTrainer .. " (" .. tostring(source) .. ")"
-		end
-
-		Fluent:Notify({ Title = "Travel", Content = content, Duration = 5 })
-	end,
-})
-
-Tabs.Travel:AddButton({
-	Title = "Scan for trainers here",
-	Description = "Records any trainer loaded right now so it stays teleportable",
-	Callback = function()
-		local learned = scanTrainers()
-		raiseIdentity()
-		Fluent:Notify({
-			Title = "Travel",
-			Content = #learned > 0 and ("learned " .. table.concat(learned, ", ")) or "none new here",
-			Duration = 5,
-		})
-	end,
-})
-
--- Spin ----------------------------------------------------------------------------
-
-local rarityDropdown = Tabs.Spin:AddDropdown("SpinMinRarity", {
-	Title = "Stop at",
-	Description = "Stops as soon as a clan of this tier or better is rolled",
-	Values = RARITY_ORDER,
-	Multi = false,
-	Default = 4,
-})
-
-rarityDropdown:OnChanged(function(value)
-	spinMinRarity = RARITY_LABELS[value] or 5
-end)
-
-rarityDropdown:SetValue("5 Legendary")
-
-Tabs.Spin:AddButton({
-	Title = "Spin once",
-	Callback = function()
-		if spinsLeft() < SPIN_COST then
-			raiseIdentity()
-			Fluent:Notify({ Title = "Spin", Content = "out of spins", Duration = 4 })
-			return
-		end
-
-		local ok, name, _, label = spinOnce()
-		raiseIdentity()
-
-		Fluent:Notify({
-			Title = ok and "Spin" or "Spin failed",
-			Content = ok and (tostring(name) .. " [" .. tostring(label) .. "]") or tostring(name),
-			SubContent = ok and (spinsLeft() .. " left") or nil,
-			Duration = 5,
-		})
-	end,
-})
-
-local autoSpinToggle = Tabs.Spin:AddToggle("AutoSpin", {
-	Title = "Auto Spin",
-	Description = "Rolls until the chosen tier is hit, or spins run out",
-	Default = false,
-})
-
-autoSpinToggle:OnChanged(function(value)
-	autoSpin = value
-end)
-
--- Settings ----------------------------------------------------------------------
-
-if SaveManager ~= nil and InterfaceManager ~= nil then
-	SaveManager:SetLibrary(Fluent)
-	InterfaceManager:SetLibrary(Fluent)
-	SaveManager:IgnoreThemeSettings()
-	SaveManager:SetIgnoreIndexes({})
-	InterfaceManager:SetFolder("amitoofast")
-	SaveManager:SetFolder("amitoofast/amitoofast")
-	InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-	SaveManager:BuildConfigSection(Tabs.Settings)
+_0x0451:_0x044e(function(_0x0118)
+_0x028f = _0x0118
+if not _0x0118 then
+_0x0127, _0x0130, _0x02f3, _0x0287 = false, false, false, false
+_0x029c = false
+_0x008b, _0x0169 = nil, nil
 end
-
--- Autostart hooks, for the one-click launcher.
---   _G.amitoofast_QUEST     = "Ill take 3 bandits"   -- accept key to farm
---   _G.amitoofast_AUTOSTART = true                   -- flip AUTO FARM on
--- Set these BEFORE loading this file.
-if type(_G.amitoofast_QUEST) == "string" and table.find(questKeysCached, _G.amitoofast_QUEST) then
-	questDropdown:SetValue(_G.amitoofast_QUEST)
+end)
+local _0x0456 = _0x0437._0x0438:_0x044b(string.char(65, 117, 116, 111, 80, 105, 99, 107, 81, 117, 101, 115, 116), {
+_0x042b = string.char(80, 105, 99, 107, 32, 113, 117, 101, 115, 116, 115, 32, 97, 117, 116, 111, 109, 97, 116, 105, 99, 97, 108, 108, 121),
+_0x044c = string.char(87, 111, 114, 107, 115, 32, 100, 111, 119, 110, 32, 116, 104, 101, 32, 113, 117, 101, 115, 116, 32, 108, 105, 115, 116, 32, 98, 121, 32, 108, 101, 118, 101, 108, 44, 32, 117, 115, 105, 110, 103, 32, 116, 104, 101, 32, 103, 97, 109, 101, 39, 115, 32, 111, 119, 110, 32, 67, 97, 110, 65, 100, 100, 81, 117, 101, 115, 116),
+_0x044d = true,
+})
+_0x0456:_0x044e(function(_0x0118)
+_0x0291 = _0x0118
+end)
+local _0x0457 = _0x0437._0x0438:_0x044b(string.char(67, 111, 109, 98, 97, 116, 81, 117, 101, 115, 116, 115, 79, 110, 108, 121), {
+_0x042b = string.char(75, 105, 108, 108, 32, 113, 117, 101, 115, 116, 115, 32, 111, 110, 108, 121),
+_0x044c = string.char(83, 107, 105, 112, 32, 102, 101, 116, 99, 104, 44, 32, 100, 101, 108, 105, 118, 101, 114, 121, 32, 97, 110, 100, 32, 102, 105, 115, 104, 105, 110, 103, 32, 113, 117, 101, 115, 116, 115, 32, 45, 32, 110, 111, 116, 104, 105, 110, 103, 32, 97, 117, 116, 111, 109, 97, 116, 101, 115, 32, 116, 104, 111, 115, 101),
+_0x044d = true,
+})
+_0x0457:_0x044e(function(_0x0118)
+_0x029f = _0x0118
+_0x02b9 = nil
+end)
+local _0x0458 = _0x0437._0x0438:_0x044b(string.char(65, 117, 116, 111, 70, 97, 114, 109, 81, 117, 101, 115, 116), {
+_0x042b = string.char(65, 117, 116, 111, 32, 70, 97, 114, 109, 32, 81, 117, 101, 115, 116),
+_0x044c = string.char(79, 118, 101, 114, 114, 105, 100, 101, 115, 32, 116, 104, 101, 32, 116, 97, 114, 103, 101, 116, 32, 108, 105, 115, 116, 32, 119, 105, 116, 104, 32, 119, 104, 97, 116, 101, 118, 101, 114, 32, 121, 111, 117, 114, 32, 113, 117, 101, 115, 116, 32, 110, 101, 101, 100, 115),
+_0x044d = false,
+})
+_0x0458:_0x044e(function(_0x0118)
+_0x0287 = _0x0118
+_0x008b, _0x0169 = nil, nil
+end)
+local _0x045e = _0x0437._0x0167:_0x045f(string.char(82, 101, 103, 105, 111, 110), {
+_0x042b = string.char(82, 101, 103, 105, 111, 110),
+_0x0460 = _0x0425,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x045e:_0x0462(_0x0146)
+local _0x0463 = _0x0437._0x0167:_0x045f(string.char(84, 97, 114, 103, 101, 116), {
+_0x042b = string.char(84, 97, 114, 103, 101, 116, 115),
+_0x044c = string.char(80, 105, 99, 107, 32, 97, 110, 121, 32, 110, 117, 109, 98, 101, 114, 46, 32, 78, 111, 110, 101, 32, 61, 32, 110, 101, 97, 114, 101, 115, 116, 32, 111, 102, 32, 97, 110, 121, 116, 104, 105, 110, 103, 46, 32, 73, 103, 110, 111, 114, 101, 100, 32, 119, 104, 105, 108, 101, 32, 65, 117, 116, 111, 32, 70, 97, 114, 109, 32, 81, 117, 101, 115, 116, 32, 105, 115, 32, 111, 110, 46),
+_0x0460 = _0x0426,
+_0x0461 = true,
+_0x044d = {},
+})
+_0x045e:_0x044e(function(_0x0118)
+_0x0146 = _0x0118
+_0x008b, _0x0169 = nil, nil
+local _0x013f = _0x014e()
+_0x004a()
+_0x0463:_0x0467(_0x013f)
+_0x0145 = {}
+end)
+_0x0463:_0x044e(function(_0x0118)
+local _0x02dd = {}
+if type(_0x0118) == string.char(116, 97, 98, 108, 101) then
+for _0x0061, _0x001b in pairs(_0x0118) do
+if _0x001b then
+_0x02dd[_0x0061] = true
 end
-
-if _G.amitoofast_AUTOSTART then
-	-- give the dropdowns a beat to settle before the loop reads them
-	task.delay(1, function()
-		autoAllToggle:SetValue(true)
-		Fluent:Notify({
-			Title = "amitoofast",
-			Content = "Auto farm started",
-			SubContent = tostring(_G.amitoofast_QUEST or "quest: first in list"),
-			Duration = 5,
-		})
-	end)
 end
-
-Window:SelectTab(1)
-
-Fluent:Notify({
-	Title = "amitoofast",
-	Content = "Loaded - combat route: " .. combatRouteName,
-	Duration = 6,
+end
+_0x0145 = _0x02dd
+_0x008b, _0x0169 = nil, nil
+end)
+if table.find(_0x0426, string.char(42, 67, 105, 118, 105, 108, 105, 97, 110, 42)) then
+_0x0463:_0x0462({ [string.char(42, 67, 105, 118, 105, 108, 105, 97, 110, 42)] = true })
+end
+_0x0437._0x0167:_0x046f({
+_0x042b = string.char(82, 101, 115, 99, 97, 110, 32, 78, 80, 67, 115),
+_0x044c = string.char(82, 101, 108, 111, 97, 100, 32, 116, 104, 101, 32, 116, 97, 114, 103, 101, 116, 32, 108, 105, 115, 116, 32, 102, 114, 111, 109, 32, 116, 104, 101, 32, 99, 117, 114, 114, 101, 110, 116, 32, 114, 101, 103, 105, 111, 110),
+_0x0470 = function()
+local _0x013f = _0x014e()
+_0x004a()
+_0x0463:_0x0467(_0x013f)
+_0x003c:_0x0471({ _0x042b = string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116), _0x0472 = string.char(78, 80, 67, 32, 108, 105, 115, 116, 32, 114, 101, 102, 114, 101, 115, 104, 101, 100), _0x0473 = 3 })
+end,
+})
+local _0x0474 = _0x0437._0x0167:_0x044b(string.char(65, 118, 111, 105, 100, 83, 104, 105, 101, 108, 100), {
+_0x042b = string.char(65, 118, 111, 105, 100, 32, 115, 104, 105, 101, 108, 100),
+_0x044c = string.char(66, 97, 99, 107, 32, 111, 102, 102, 32, 97, 110, 100, 32, 115, 116, 111, 112, 32, 115, 119, 105, 110, 103, 105, 110, 103, 32, 119, 104, 105, 108, 101, 32, 116, 104, 101, 32, 116, 97, 114, 103, 101, 116, 32, 105, 115, 32, 98, 108, 111, 99, 107, 105, 110, 103),
+_0x044d = true,
+})
+_0x0474:_0x044e(function(_0x0118)
+_0x0096 = _0x0118
+if not _0x0118 then
+_0x0095 = false
+end
+end)
+local _0x0475 = _0x0437._0x0167:_0x044b(string.char(68, 111, 100, 103, 101, 79, 110, 72, 105, 116), {
+_0x042b = string.char(68, 111, 100, 103, 101, 32, 119, 104, 101, 110, 32, 104, 105, 116),
+_0x044c = string.char(83, 119, 105, 110, 103, 32, 114, 111, 117, 110, 100, 32, 116, 111, 32, 97, 32, 110, 101, 119, 32, 97, 110, 103, 108, 101, 32, 97, 102, 116, 101, 114, 32, 116, 97, 107, 105, 110, 103, 32, 100, 97, 109, 97, 103, 101),
+_0x044d = true,
+})
+_0x0475:_0x044e(function(_0x0118)
+_0x00a4 = _0x0118
+if not _0x0118 then
+_0x00a7 = 0
+end
+end)
+local _0x0476 = _0x0437._0x0167:_0x0477(string.char(68, 111, 100, 103, 101, 83, 116, 117, 100, 115), {
+_0x042b = string.char(68, 111, 100, 103, 101, 32, 100, 105, 115, 116, 97, 110, 99, 101),
+_0x044d = (48 / 4),
+_0x0478 = 0,
+_0x0107 = 40,
+_0x0479 = 0,
+})
+_0x0476:_0x044e(function(_0x0118)
+_0x00a5 = _0x0118
+end)
+local _0x047a = _0x0437._0x0167:_0x0477(string.char(68, 111, 100, 103, 101, 84, 105, 109, 101), {
+_0x042b = string.char(68, 111, 100, 103, 101, 32, 116, 105, 109, 101),
+_0x044c = string.char(83, 101, 99, 111, 110, 100, 115, 32, 116, 111, 32, 115, 116, 97, 121, 32, 111, 102, 102, 32, 97, 102, 116, 101, 114, 32, 97, 32, 104, 105, 116),
+_0x044d = 1,
+_0x0478 = 0,
+_0x0107 = 5,
+_0x0479 = 1,
+})
+_0x047a:_0x044e(function(_0x0118)
+_0x00a6 = _0x0118
+end)
+local _0x047b = _0x0437._0x0167:_0x0477(string.char(65, 118, 111, 105, 100, 68, 105, 115, 116, 97, 110, 99, 101), {
+_0x042b = string.char(66, 97, 99, 107, 32, 111, 102, 102, 32, 98, 121),
+_0x044c = string.char(69, 120, 116, 114, 97, 32, 115, 116, 117, 100, 115, 32, 116, 111, 32, 114, 101, 116, 114, 101, 97, 116, 32, 119, 104, 105, 108, 101, 32, 116, 104, 101, 121, 32, 98, 108, 111, 99, 107),
+_0x044d = 10,
+_0x0478 = 0,
+_0x0107 = (96 - 56),
+_0x0479 = 0,
+})
+_0x047b:_0x044e(function(_0x0118)
+_0x0097 = _0x0118
+end)
+local _0x047c = _0x0437._0x0167:_0x0477(string.char(66, 101, 104, 105, 110, 100, 68, 105, 115, 116, 97, 110, 99, 101), {
+_0x042b = string.char(68, 105, 115, 116, 97, 110, 99, 101),
+_0x044c = string.char(83, 116, 117, 100, 115, 32, 98, 101, 104, 105, 110, 100, 32, 116, 104, 101, 32, 116, 97, 114, 103, 101, 116),
+_0x044d = _0x013c,
+_0x0478 = 1,
+_0x0107 = (7 + 8),
+_0x0479 = 1,
+})
+_0x047c:_0x044e(function(_0x0118)
+_0x013c = _0x0118
+end)
+local _0x047d = _0x0437._0x0167:_0x0477(string.char(66, 101, 104, 105, 110, 100, 72, 101, 105, 103, 104, 116), {
+_0x042b = string.char(72, 101, 105, 103, 104, 116),
+_0x044d = _0x013d,
+_0x0478 = -10,
+_0x0107 = (40 / 4),
+_0x0479 = 1,
+})
+_0x047d:_0x044e(function(_0x0118)
+_0x013d = _0x0118
+end)
+_0x0437._0x01fa:_0x046f({
+_0x042b = string.char(82, 101, 102, 114, 101, 115, 104, 32, 110, 111, 119),
+_0x0470 = function()
+local _0x0017 = _0x01cb()
+_0x004a()
+end,
+})
+local _0x0487 = _0x0427[1]
+local _0x0488 = _0x0437._0x01fa:_0x045f(string.char(81, 117, 101, 115, 116, 80, 105, 99, 107), {
+_0x042b = string.char(81, 117, 101, 115, 116),
+_0x044c = #_0x0427 .. string.char(32, 97, 118, 97, 105, 108, 97, 98, 108, 101, 32, 45, 32, 116, 104, 101, 32, 40, 76, 118, 32, 110, 41, 32, 115, 117, 102, 102, 105, 120, 32, 105, 115, 32, 105, 116, 115, 32, 108, 101, 118, 101, 108, 32, 103, 97, 116, 101),
+_0x0460 = _0x0427,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x0488:_0x044e(function(_0x0118)
+_0x0487 = _0x0118
+end)
+_0x0437._0x01fa:_0x046f({
+_0x042b = string.char(65, 99, 99, 101, 112, 116, 32, 115, 101, 108, 101, 99, 116, 101, 100, 32, 113, 117, 101, 115, 116),
+_0x044c = string.char(82, 117, 110, 115, 32, 116, 104, 101, 32, 103, 97, 109, 101, 39, 115, 32, 111, 119, 110, 32, 103, 97, 116, 101, 115, 32, 97, 110, 100, 32, 114, 101, 112, 111, 114, 116, 115, 32, 116, 104, 101, 32, 114, 101, 102, 117, 115, 97, 108, 32, 114, 101, 97, 115, 111, 110),
+_0x0470 = function()
+if _0x0487 == nil then
+return
+end
+local _0x0063, _0x013a = _0x01f7(_0x0487)
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = _0x0063 and string.char(81, 117, 101, 115, 116, 32, 97, 99, 99, 101, 112, 116, 101, 100) or string.char(82, 101, 102, 117, 115, 101, 100),
+_0x0472 = _0x0487,
+_0x0489 = (not _0x0063) and tostring(_0x013a) or nil,
+_0x0473 = (98 - 92),
+})
+end,
+})
+local _0x048a = _0x0437._0x01fa:_0x044b(string.char(65, 117, 116, 111, 81, 117, 101, 115, 116), {
+_0x042b = string.char(65, 117, 116, 111, 32, 65, 99, 99, 101, 112, 116),
+_0x044c = string.char(82, 101, 45, 97, 99, 99, 101, 112, 116, 115, 32, 116, 104, 101, 32, 115, 101, 108, 101, 99, 116, 101, 100, 32, 113, 117, 101, 115, 116, 32, 119, 104, 101, 110, 101, 118, 101, 114, 32, 121, 111, 117, 32, 104, 97, 118, 101, 32, 110, 111, 110, 101),
+_0x044d = false,
+})
+local _0x048b = false
+_0x048a:_0x044e(function(_0x0118)
+_0x048b = _0x0118
+end)
+local _0x048c = _0x0437._0x01fa:_0x044b(string.char(84, 112, 84, 111, 71, 105, 118, 101, 114), {
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 103, 105, 118, 101, 114, 32, 102, 105, 114, 115, 116),
+_0x044c = string.char(84, 104, 101, 32, 115, 101, 114, 118, 101, 114, 32, 114, 101, 102, 117, 115, 101, 115, 32, 97, 110, 32, 97, 99, 99, 101, 112, 116, 32, 117, 110, 108, 101, 115, 115, 32, 121, 111, 117, 32, 97, 114, 101, 32, 110, 101, 97, 114, 32, 116, 104, 101, 32, 79, 102, 102, 101, 114, 78, 112, 99),
+_0x044d = true,
+})
+_0x048c:_0x044e(function(_0x0118)
+_0x02f1 = _0x0118
+end)
+_0x0437._0x01fa:_0x046f({
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 103, 105, 118, 101, 114),
+_0x044c = string.char(83, 116, 97, 116, 105, 111, 110, 97, 114, 121, 32, 78, 80, 67, 32, 116, 104, 97, 116, 32, 111, 102, 102, 101, 114, 115, 32, 116, 104, 101, 32, 115, 101, 108, 101, 99, 116, 101, 100, 32, 113, 117, 101, 115, 116),
+_0x0470 = function()
+local _0x0208 = _0x0210(_0x0487)
+local _0x025d, _0x0149 = _0x0205(_0x0208)
+local _0x0063 = _0x0273(_0x025d)
+_0x004a()
+local _0x048d
+if _0x0208 == nil then
+_0x048d = string.char(116, 104, 105, 115, 32, 113, 117, 101, 115, 116, 32, 110, 97, 109, 101, 115, 32, 110, 111, 32, 79, 102, 102, 101, 114, 78, 112, 99)
+elseif _0x025d == nil then
+_0x048d = string.char(99, 111, 117, 108, 100, 110, 39, 116, 32, 102, 105, 110, 100, 32) .. _0x0208 .. string.char(32, 105, 110, 32, 97, 110, 121, 32, 83, 116, 97, 116, 105, 111, 110, 97, 114, 121, 78, 112, 99, 115)
+elseif not _0x0063 then
+_0x048d = string.char(110, 111, 32, 99, 104, 97, 114, 97, 99, 116, 101, 114, 32, 116, 111, 32, 109, 111, 118, 101)
+else
+_0x048d = _0x0208 .. string.char(32, 40) .. tostring(_0x0149) .. string.char(41)
+end
+_0x003c:_0x0471({ _0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116), _0x0472 = _0x048d, _0x0473 = (59 - 54) })
+end,
+})
+_0x0437._0x01fa:_0x046f({
+_0x042b = string.char(84, 97, 108, 107, 32, 116, 111, 32, 103, 105, 118, 101, 114, 32, 40, 112, 114, 101, 115, 115, 32, 84, 41),
+_0x044c = string.char(70, 105, 114, 101, 115, 32, 116, 104, 101, 32, 78, 80, 67, 39, 115, 32, 68, 105, 97, 108, 111, 103, 117, 101, 32, 112, 114, 111, 109, 112, 116, 32, 45, 32, 117, 115, 101, 32, 105, 116, 32, 116, 111, 32, 104, 97, 110, 100, 32, 97, 32, 113, 117, 101, 115, 116, 32, 105, 110),
+_0x0470 = function()
+local _0x048e = _0x02a3()
+local _0x020d = _0x0210(_0x048e or _0x0487)
+local _0x0063, _0x048f = _0x03b5(_0x020d)
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = _0x0063 and string.char(84, 97, 108, 107, 101, 100) or string.char(70, 97, 105, 108, 101, 100),
+_0x0472 = tostring(_0x020d or string.char(110, 111, 32, 103, 105, 118, 101, 114)),
+_0x0489 = tostring(_0x048f),
+_0x0473 = 5,
+})
+end,
+})
+_0x0437._0x01fa:_0x046f({
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 111, 98, 106, 101, 99, 116, 105, 118, 101),
+_0x044c = string.char(85, 115, 101, 115, 32, 116, 104, 101, 32, 113, 117, 101, 115, 116, 32, 121, 111, 117, 32, 97, 114, 101, 32, 104, 111, 108, 100, 105, 110, 103, 59, 32, 102, 97, 108, 108, 115, 32, 98, 97, 99, 107, 32, 116, 111, 32, 116, 104, 101, 32, 100, 114, 111, 112, 100, 111, 119, 110),
+_0x0470 = function()
+local _0x025d, _0x003b, _0x026c = _0x0272()
+if _0x025d == nil then
+_0x025d, _0x026c = _0x026d(_0x0487)
+_0x003b = _0x0487
+end
+local _0x0063 = _0x0273(_0x025d)
+_0x004a()
+local _0x048d
+if _0x025d == nil then
+_0x048d = string.char(110, 111, 32, 80, 111, 115, 105, 116, 105, 111, 110, 32, 111, 110, 32) .. tostring(_0x003b or _0x0487)
+elseif not _0x0063 then
+_0x048d = string.char(110, 111, 32, 99, 104, 97, 114, 97, 99, 116, 101, 114, 32, 116, 111, 32, 109, 111, 118, 101)
+else
+_0x048d = tostring(_0x003b)
+end
+_0x003c:_0x0471({
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116),
+_0x0472 = _0x048d,
+_0x0489 = (_0x025d ~= nil) and tostring(_0x026c) or nil,
+_0x0473 = (99 - 94),
+})
+end,
+})
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+if _0x048b and _0x0487 ~= nil then
+local _0x0150 = _0x01dc()
+local _0x04a0 = (_0x006a and _0x006a._0x04a1) or 1
+if _0x0150 >= _0x04a0 then
+_0x02f2 = string.char(104, 97, 118, 101, 32, 97, 32, 113, 117, 101, 115, 116)
+_0x0128._0x0113(1)
+else
+local _0x04a2 = _0x01e5()
+if _0x04a2 > 0 then
+_0x02f2 = string.format(string.char(99, 111, 111, 108, 100, 111, 119, 110, 32, 37, 100, 115), math.ceil(_0x04a2))
+_0x0128._0x0113(math.min(_0x04a2, 5))
+else
+if _0x02f1 then
+local _0x025d = _0x0205(_0x0210(_0x0487))
+if _0x025d ~= nil then
+_0x0273(_0x025d)
+_0x0128._0x0113(0.4)
+end
+end
+local _0x0042 = _0x01dc()
+local _0x0063, _0x013a = _0x01f7(_0x0487)
+if not _0x0063 then
+_0x02f2 = string.char(114, 101, 102, 117, 115, 101, 100, 58, 32) .. tostring(_0x013a)
+_0x004a()
+_0x0128._0x0113(3)
+else
+local _0x033a = _0x0033() + 2
+repeat
+_0x0128._0x0113(0.1)
+until _0x01dc() > _0x0042 or _0x0033() > _0x033a
+_0x004a()
+if _0x01dc() > _0x0042 then
+_0x02f2 = string.char(97, 99, 99, 101, 112, 116, 101, 100, 32) .. _0x0487
+_0x0128._0x0113(1)
+else
+_0x02f2 = string.char(102, 105, 114, 101, 100, 32, 98, 117, 116, 32, 110, 111, 116, 32, 103, 114, 97, 110, 116, 101, 100, 32, 45, 32, 116, 111, 111, 32, 102, 97, 114, 32, 102, 114, 111, 109, 32) ..
+tostring(_0x0210(_0x0487) or string.char(116, 104, 101, 32, 103, 105, 118, 101, 114)) .. string.char(63)
+_0x0128._0x0113(5)
+end
+end
+end
+end
+else
+_0x02f2 = _0x048b and string.char(110, 111, 32, 113, 117, 101, 115, 116, 32, 115, 101, 108, 101, 99, 116, 101, 100) or string.char(111, 102, 102)
+_0x0128._0x0113(0.5)
+end
+end
+end)
+_0x0128._0x0129(function()
+local _0x04ac = 0
+while true do
+if _0x003c._0x012a then break end
+if not _0x028f then
+_0x0128._0x0113(0.5)
+else
+_0x02f3 = true
+_0x0287 = true
+_0x029c = true
+if not _0x0368() then
+local _0x01c3 = _0x0343()
+if _0x029d ~= nil and _0x029d ~= string.char(60, 110, 111, 110, 101, 62)
+and (_0x01c3[_0x029e] or 0) == 0 then
+pcall(_0x0369, _0x029d, _0x029e)
+end
+pcall(_0x0363, _0x029e)
+_0x004a()
+end
+local _0x0150 = _0x01dc()
+if _0x0150 == 0 then
+_0x0127, _0x0130 = false, false
+local _0x04a2 = _0x01e5()
+if _0x04a2 > 0 then
+_0x0290 = string.format(string.char(113, 117, 101, 115, 116, 32, 99, 111, 111, 108, 100, 111, 119, 110, 32, 37, 100, 115), math.ceil(_0x04a2))
+_0x0128._0x0113(math.min(_0x04a2, 5))
+else
+local _0x04b6 = _0x0487
+if _0x0291 then
+local _0x04b7 = _0x02cb()
+if _0x04b7 ~= nil then
+_0x04b6 = _0x04b7
+end
+end
+if _0x04b6 == nil then
+_0x0290 = string.char(110, 111, 116, 104, 105, 110, 103, 32, 101, 108, 105, 103, 105, 98, 108, 101, 32, 45, 32, 99, 104, 101, 99, 107, 32, 108, 101, 118, 101, 108, 32, 47, 32, 103, 105, 118, 101, 114, 115, 32, 110, 101, 97, 114, 98, 121)
+_0x0128._0x0113(3)
+else
+_0x0487 = _0x04b6
+local _0x020d = _0x0210(_0x0487)
+local _0x025d = _0x0205(_0x020d)
+if _0x025d ~= nil then
+_0x0273(_0x025d)
+_0x0128._0x0113(0.5)
+end
+local _0x0042 = _0x01dc()
+local _0x0063, _0x013a = _0x01f7(_0x0487)
+if not _0x0063 then
+_0x0290 = string.char(114, 101, 102, 117, 115, 101, 100, 58, 32) .. tostring(_0x013a)
+_0x0128._0x0113(3)
+else
+local _0x033a = _0x0033() + 2
+repeat
+_0x0128._0x0113(0.1)
+until _0x01dc() > _0x0042 or _0x0033() > _0x033a
+if _0x01dc() > _0x0042 then
+_0x0290 = string.char(97, 99, 99, 101, 112, 116, 101, 100, 32) .. tostring(_0x0487)
+_0x04ac = 0
+else
+_0x0290 = string.char(110, 111, 116, 32, 103, 114, 97, 110, 116, 101, 100, 32, 45, 32, 116, 111, 111, 32, 102, 97, 114, 32, 102, 114, 111, 109, 32) .. tostring(_0x020d or string.char(103, 105, 118, 101, 114))
+_0x0128._0x0113(4)
+end
+end
+end
+end
+elseif _0x02d1() then
+_0x0127, _0x0130 = false, false
+local _0x048e = _0x02a3()
+local _0x020d = _0x0210(_0x048e or _0x0487)
+if _0x0033() - _0x04ac > 4 then
+local _0x0063, _0x048f = _0x03b5(_0x020d)
+_0x04ac = _0x0033()
+_0x0290 = string.char(116, 117, 114, 110, 105, 110, 103, 32, 105, 110, 32, 97, 116, 32) .. tostring(_0x020d or string.char(63))
+.. string.char(32, 45, 32) .. tostring(_0x048f)
+end
+_0x0128._0x0113(2)
+else
+_0x0127, _0x0130 = true, true
+if not _0x0086() then
+if _0x0033() - _0x04ac > (103 - 98) then
+local _0x025d, _0x003b = _0x0272()
+if _0x025d ~= nil then
+_0x0273(_0x025d)
+_0x04ac = _0x0033()
+_0x0290 = string.char(116, 114, 97, 118, 101, 108, 108, 105, 110, 103, 32, 116, 111, 32) .. tostring(_0x003b)
+else
+_0x0290 = string.char(110, 111, 32, 111, 98, 106, 101, 99, 116, 105, 118, 101, 32, 112, 111, 115, 105, 116, 105, 111, 110, 32, 45, 32, 102, 105, 103, 104, 116, 105, 110, 103, 32, 119, 104, 101, 114, 101, 32, 121, 111, 117, 32, 115, 116, 97, 110, 100)
+end
+end
+else
+_0x0290 = string.char(102, 97, 114, 109, 105, 110, 103, 58, 32) .. tostring(_0x0288)
+end
+end
+_0x0128._0x0113(1)
+end
+end
+end)
+local _0x04ca = _0x0437._0x043b:_0x044b(string.char(65, 117, 116, 111, 76, 111, 111, 116), {
+_0x042b = string.char(65, 117, 116, 111, 32, 76, 111, 111, 116),
+_0x044c = string.char(70, 105, 114, 101, 115, 32, 101, 118, 101, 114, 121, 32, 76, 111, 111, 116, 68, 114, 111, 112, 80, 114, 111, 109, 112, 116, 32, 117, 110, 100, 101, 114, 32, 87, 111, 114, 107, 115, 112, 97, 99, 101, 46, 76, 111, 111, 116, 68, 114, 111, 112, 115),
+_0x044d = false,
+})
+_0x04ca:_0x044e(function(_0x0118)
+_0x02f3 = _0x0118
+end)
+local _0x04cb = _0x0437._0x043b:_0x0477(string.char(76, 111, 111, 116, 82, 97, 110, 103, 101), {
+_0x042b = string.char(82, 97, 110, 103, 101),
+_0x044c = string.char(48, 32, 61, 32, 105, 103, 110, 111, 114, 101, 32, 100, 105, 115, 116, 97, 110, 99, 101, 32, 40, 102, 105, 114, 101, 112, 114, 111, 120, 105, 109, 105, 116, 121, 112, 114, 111, 109, 112, 116, 32, 98, 121, 112, 97, 115, 115, 101, 115, 32, 105, 116, 32, 97, 110, 121, 119, 97, 121, 41),
+_0x044d = 0,
+_0x0478 = 0,
+_0x0107 = (283 - 83),
+_0x0479 = 0,
+})
+_0x04cb:_0x044e(function(_0x0118)
+_0x02f4 = _0x0118
+end)
+_0x0437._0x043b:_0x046f({
+_0x042b = string.char(76, 111, 111, 116, 32, 111, 110, 99, 101),
+_0x0470 = function()
+local _0x00ed = _0x0308()
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = string.char(76, 111, 111, 116),
+_0x0472 = _0x00ed > 0 and (string.char(102, 105, 114, 101, 100, 32) .. _0x00ed .. string.char(32, 112, 114, 111, 109, 112, 116, 40, 115, 41)) or string.char(110, 111, 116, 104, 105, 110, 103, 32, 111, 110, 32, 116, 104, 101, 32, 103, 114, 111, 117, 110, 100),
+_0x0473 = 4,
+})
+end,
+})
+_0x029d = _0x0428[1]
+_0x029e = string.char(79, 110, 101)
+local _0x04cc = _0x0437._0x0297:_0x045f(string.char(84, 111, 111, 108, 98, 97, 114, 73, 116, 101, 109), {
+_0x042b = string.char(87, 101, 97, 112, 111, 110, 32, 47, 32, 115, 116, 121, 108, 101),
+_0x044c = string.char(73, 110, 118, 101, 110, 116, 111, 114, 121, 32, 105, 116, 101, 109, 115, 32, 102, 108, 97, 103, 103, 101, 100, 32, 72, 97, 115, 67, 111, 109, 98, 97, 116),
+_0x0460 = _0x0428,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x04cc:_0x044e(function(_0x0118)
+_0x029d = _0x0118
+end)
+local _0x04cd = _0x0437._0x0297:_0x045f(string.char(84, 111, 111, 108, 98, 97, 114, 83, 108, 111, 116), {
+_0x042b = string.char(84, 111, 111, 108, 98, 97, 114, 32, 115, 108, 111, 116),
+_0x0460 = _0x0342,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x04cd:_0x044e(function(_0x0118)
+_0x029e = _0x0118
+end)
+local _0x04ce = _0x0437._0x0297:_0x044b(string.char(65, 117, 116, 111, 69, 113, 117, 105, 112, 87, 101, 97, 112, 111, 110), {
+_0x042b = string.char(65, 117, 116, 111, 32, 101, 113, 117, 105, 112, 32, 119, 101, 97, 112, 111, 110),
+_0x044c = string.char(82, 101, 45, 101, 113, 117, 105, 112, 115, 32, 116, 104, 101, 32, 115, 101, 108, 101, 99, 116, 105, 111, 110, 32, 98, 101, 108, 111, 119, 32, 119, 104, 101, 110, 101, 118, 101, 114, 32, 116, 104, 97, 116, 32, 115, 108, 111, 116, 32, 101, 109, 112, 116, 105, 101, 115),
+_0x044d = false,
+})
+_0x04ce:_0x044e(function(_0x0118)
+_0x029c = _0x0118
+end)
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+if _0x029c and _0x029d ~= nil and _0x029d ~= string.char(60, 110, 111, 110, 101, 62) then
+local _0x01c3 = _0x0343()
+if (_0x01c3[_0x029e] or 0) == 0 then
+pcall(_0x0369, _0x029d, _0x029e)
+_0x004a()
+elseif not _0x0368() then
+pcall(_0x0363, _0x029e)
+_0x004a()
+end
+end
+_0x0128._0x0113((2 + 3))
+end
+end)
+_0x0437._0x0297:_0x046f({
+_0x042b = string.char(69, 113, 117, 105, 112, 32, 116, 111, 32, 116, 111, 111, 108, 98, 97, 114),
+_0x044c = string.char(84, 111, 111, 108, 98, 97, 114, 95, 69, 113, 117, 105, 112, 44, 32, 116, 104, 101, 110, 32, 112, 114, 101, 115, 115, 101, 115, 32, 116, 104, 101, 32, 115, 108, 111, 116, 32, 107, 101, 121, 32, 116, 111, 32, 100, 114, 97, 119, 32, 105, 116),
+_0x0470 = function()
+local _0x0063, _0x013a = _0x0369(_0x029d, _0x029e)
+if _0x0063 then
+_0x0363(_0x029e)
+_0x0128._0x0113(0.3)
+end
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = _0x0063 and string.char(69, 113, 117, 105, 112, 112, 101, 100) or string.char(70, 97, 105, 108, 101, 100),
+_0x0472 = tostring(_0x029d) .. string.char(32, 45, 62, 32) .. _0x029e,
+_0x0489 = (not _0x0063) and tostring(_0x013a) or nil,
+_0x0473 = (2 + 3),
+})
+end,
+})
+local _0x04db = string.char(83, 116, 97, 116, 115)
+local _0x04dc     = string.char(98, 97, 108, 97, 110, 99, 101, 100)
+local _0x04dd = _0x0437._0x0297:_0x045f(string.char(69, 113, 117, 105, 112, 77, 111, 100, 101), {
+_0x042b = string.char(66, 101, 115, 116, 32, 109, 111, 100, 101),
+_0x044c = string.char(72, 111, 119, 32, 115, 116, 97, 116, 115, 32, 97, 114, 101, 32, 119, 101, 105, 103, 104, 116, 101, 100, 32, 119, 104, 101, 110, 32, 114, 97, 110, 107, 105, 110, 103, 32, 45, 32, 116, 104, 101, 32, 119, 101, 105, 103, 104, 116, 115, 32, 97, 114, 101, 32, 116, 117, 110, 97, 98, 108, 101, 32, 103, 117, 101, 115, 115, 101, 115),
+_0x0460 = { string.char(98, 97, 108, 97, 110, 99, 101, 100), string.char(100, 97, 109, 97, 103, 101), string.char(116, 97, 110, 107), string.char(115, 116, 97, 109, 105, 110, 97), string.char(115, 112, 101, 101, 100) },
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x04dd:_0x044e(function(_0x0118)
+_0x04dc = _0x0118
+end)
+_0x0437._0x0297:_0x046f({
+_0x042b = string.char(69, 113, 117, 105, 112, 32, 98, 101, 115, 116, 32, 40, 112, 114, 101, 118, 105, 101, 119, 41),
+_0x044c = string.char(82, 97, 110, 107, 115, 32, 97, 110, 100, 32, 114, 101, 112, 111, 114, 116, 115, 32, 119, 105, 116, 104, 111, 117, 116, 32, 102, 105, 114, 105, 110, 103, 32, 97, 110, 121, 116, 104, 105, 110, 103),
+_0x0470 = function()
+local _0x0396 = _0x0391(_0x04dc, _0x04db, true)
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = string.char(69, 113, 117, 105, 112, 32, 98, 101, 115, 116, 32, 45, 32, 112, 114, 101, 118, 105, 101, 119),
+_0x0472 = _0x0396._0x02e7 or (#_0x0396._0x00d1 .. string.char(32, 99, 104, 97, 110, 103, 101, 40, 115, 41)),
+_0x0489 = #_0x0396._0x00d1 > 0 and table.concat(_0x0396._0x00d1, string.char(44, 32)) or nil,
+_0x0473 = 7,
+})
+end,
+})
+_0x0437._0x0297:_0x046f({
+_0x042b = string.char(69, 113, 117, 105, 112, 32, 98, 101, 115, 116),
+_0x0470 = function()
+local _0x0396 = _0x0391(_0x04dc, _0x04db, false)
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = string.char(69, 113, 117, 105, 112, 32, 98, 101, 115, 116),
+_0x0472 = _0x0396._0x02e7 or (#_0x0396._0x00d1 .. string.char(32, 101, 113, 117, 105, 112, 112, 101, 100, 44, 32) .. #_0x0396._0x0393 .. string.char(32, 102, 97, 105, 108, 101, 100)),
+_0x0489 = #_0x0396._0x00d1 > 0 and table.concat(_0x0396._0x00d1, string.char(44, 32)) or nil,
+_0x0473 = 7,
+})
+end,
+})
+_0x0128._0x0129(function()
+while true do
+if _0x003c._0x012a then break end
+pcall(_0x03d9)
+_0x004a()
+_0x0128._0x0113(5)
+end
+end)
+local _0x04e1, _0x04e2 = _0x03c1()
+_0x004a()
+local _0x04e3 = _0x04e2[1]
+local _0x04e4 = _0x0437._0x043c:_0x045f(string.char(84, 114, 97, 118, 101, 108, 82, 101, 103, 105, 111, 110), {
+_0x042b = string.char(82, 101, 103, 105, 111, 110),
+_0x0460 = _0x04e2,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x04e4:_0x044e(function(_0x0118)
+_0x04e3 = _0x0118
+end)
+_0x0437._0x043c:_0x046f({
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 114, 101, 103, 105, 111, 110),
+_0x0470 = function()
+local _0x025d = _0x04e1[_0x04e3]
+local _0x0063 = _0x0273(_0x025d)
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = string.char(84, 114, 97, 118, 101, 108),
+_0x0472 = _0x025d == nil and string.char(117, 110, 107, 110, 111, 119, 110, 32, 114, 101, 103, 105, 111, 110) or (_0x0063 and tostring(_0x04e3) or string.char(110, 111, 32, 99, 104, 97, 114, 97, 99, 116, 101, 114)),
+_0x0473 = (2 + 2),
+})
+end,
+})
+local _0x04e5 = _0x03c5[1]
+local _0x04e6 = _0x0437._0x043c:_0x045f(string.char(84, 114, 97, 118, 101, 108, 84, 114, 97, 105, 110, 101, 114), {
+_0x042b = string.char(66, 114, 101, 97, 116, 104, 105, 110, 103, 32, 116, 114, 97, 105, 110, 101, 114),
+_0x0460 = _0x03c5,
+_0x0461 = false,
+_0x044d = 1,
+})
+_0x04e6:_0x044e(function(_0x0118)
+_0x04e5 = _0x0118
+end)
+_0x0437._0x043c:_0x046f({
+_0x042b = string.char(84, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 116, 114, 97, 105, 110, 101, 114),
+_0x044c = string.char(79, 110, 108, 121, 32, 119, 111, 114, 107, 115, 32, 111, 110, 99, 101, 32, 116, 104, 97, 116, 32, 116, 114, 97, 105, 110, 101, 114, 39, 115, 32, 114, 101, 103, 105, 111, 110, 32, 104, 97, 115, 32, 115, 116, 114, 101, 97, 109, 101, 100, 32, 105, 110),
+_0x0470 = function()
+local _0x025d, _0x026c = _0x03de(_0x04e5)
+local _0x0063 = _0x0273(_0x025d)
+_0x004a()
+local _0x048d
+if _0x025d == nil then
+_0x048d = _0x04e5 .. string.char(32, 105, 115, 32, 110, 111, 116, 32, 108, 111, 97, 100, 101, 100, 32, 45, 32, 116, 101, 108, 101, 112, 111, 114, 116, 32, 116, 111, 32, 105, 116, 115, 32, 114, 101, 103, 105, 111, 110, 32, 102, 105, 114, 115, 116)
+elseif not _0x0063 then
+_0x048d = string.char(110, 111, 32, 99, 104, 97, 114, 97, 99, 116, 101, 114, 32, 116, 111, 32, 109, 111, 118, 101)
+else
+_0x048d = _0x04e5 .. string.char(32, 40) .. tostring(_0x026c) .. string.char(41)
+end
+_0x003c:_0x0471({ _0x042b = string.char(84, 114, 97, 118, 101, 108), _0x0472 = _0x048d, _0x0473 = (10 / 2) })
+end,
+})
+_0x0437._0x043c:_0x046f({
+_0x042b = string.char(83, 99, 97, 110, 32, 102, 111, 114, 32, 116, 114, 97, 105, 110, 101, 114, 115, 32, 104, 101, 114, 101),
+_0x044c = string.char(82, 101, 99, 111, 114, 100, 115, 32, 97, 110, 121, 32, 116, 114, 97, 105, 110, 101, 114, 32, 108, 111, 97, 100, 101, 100, 32, 114, 105, 103, 104, 116, 32, 110, 111, 119, 32, 115, 111, 32, 105, 116, 32, 115, 116, 97, 121, 115, 32, 116, 101, 108, 101, 112, 111, 114, 116, 97, 98, 108, 101),
+_0x0470 = function()
+local _0x03d8 = _0x03d9()
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = string.char(84, 114, 97, 118, 101, 108),
+_0x0472 = #_0x03d8 > 0 and (string.char(108, 101, 97, 114, 110, 101, 100, 32) .. table.concat(_0x03d8, string.char(44, 32))) or string.char(110, 111, 110, 101, 32, 110, 101, 119, 32, 104, 101, 114, 101),
+_0x0473 = 5,
+})
+end,
+})
+local _0x04e7 = _0x0437._0x043d:_0x045f(string.char(83, 112, 105, 110, 77, 105, 110, 82, 97, 114, 105, 116, 121), {
+_0x042b = string.char(83, 116, 111, 112, 32, 97, 116),
+_0x044c = string.char(83, 116, 111, 112, 115, 32, 97, 115, 32, 115, 111, 111, 110, 32, 97, 115, 32, 97, 32, 99, 108, 97, 110, 32, 111, 102, 32, 116, 104, 105, 115, 32, 116, 105, 101, 114, 32, 111, 114, 32, 98, 101, 116, 116, 101, 114, 32, 105, 115, 32, 114, 111, 108, 108, 101, 100),
+_0x0460 = _0x040b,
+_0x0461 = false,
+_0x044d = 4,
+})
+_0x04e7:_0x044e(function(_0x0118)
+_0x040d = _0x040a[_0x0118] or (15 / 3)
+end)
+_0x04e7:_0x0462(string.char(40, 50, 53, 32, 45, 32, 50, 48, 41, 32, 76, 101, 103, 101, 110, 100, 97, 114, 121))
+_0x0437._0x043d:_0x046f({
+_0x042b = string.char(83, 112, 105, 110, 32, 111, 110, 99, 101),
+_0x0470 = function()
+if _0x0412() < _0x0406 then
+_0x004a()
+_0x003c:_0x0471({ _0x042b = string.char(83, 112, 105, 110), _0x0472 = string.char(111, 117, 116, 32, 111, 102, 32, 115, 112, 105, 110, 115), _0x0473 = 4 })
+return
+end
+local _0x0063, _0x0061, _0x0053, _0x0269 = _0x041b()
+_0x004a()
+_0x003c:_0x0471({
+_0x042b = _0x0063 and string.char(83, 112, 105, 110) or string.char(83, 112, 105, 110, 32, 102, 97, 105, 108, 101, 100),
+_0x0472 = _0x0063 and (tostring(_0x0061) .. string.char(32, 91) .. tostring(_0x0269) .. string.char(93)) or tostring(_0x0061),
+_0x0489 = _0x0063 and (_0x0412() .. string.char(32, 108, 101, 102, 116)) or nil,
+_0x0473 = 5,
+})
+end,
+})
+local _0x04e8 = _0x0437._0x043d:_0x044b(string.char(65, 117, 116, 111, 83, 112, 105, 110), {
+_0x042b = string.char(65, 117, 116, 111, 32, 83, 112, 105, 110),
+_0x044c = string.char(82, 111, 108, 108, 115, 32, 117, 110, 116, 105, 108, 32, 116, 104, 101, 32, 99, 104, 111, 115, 101, 110, 32, 116, 105, 101, 114, 32, 105, 115, 32, 104, 105, 116, 44, 32, 111, 114, 32, 115, 112, 105, 110, 115, 32, 114, 117, 110, 32, 111, 117, 116),
+_0x044d = false,
+})
+_0x04e8:_0x044e(function(_0x0118)
+_0x040c = _0x0118
+end)
+if _0x0054 ~= nil and _0x0055 ~= nil then
+_0x0054:_0x04e9(_0x003c)
+_0x0055:_0x04e9(_0x003c)
+_0x0054:_0x04ea()
+_0x0054:_0x04eb({})
+_0x0055:_0x04ec(string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116))
+_0x0054:_0x04ec(string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116, 47, 97, 109, 105, 116, 111, 111, 102, 97, 115, 116))
+_0x0055:_0x04ed(_0x0437._0x043e)
+_0x0054:_0x04ee(_0x0437._0x043e)
+end
+if type(_0x04f2._0x04f3) == string.char(115, 116, 114, 105, 110, 103) and table.find(_0x0427, _0x04f2._0x04f3) then
+_0x0488:_0x0462(_0x04f2._0x04f3)
+end
+if _0x04f2._0x04f4 then
+_0x0128._0x013b(1, function()
+_0x0451:_0x0462(true)
+_0x003c:_0x0471({
+_0x042b = string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116),
+_0x0472 = string.char(65, 117, 116, 111, 32, 102, 97, 114, 109, 32, 115, 116, 97, 114, 116, 101, 100),
+_0x0489 = tostring(_0x04f2._0x04f3 or string.char(113, 117, 101, 115, 116, 58, 32, 102, 105, 114, 115, 116, 32, 105, 110, 32, 108, 105, 115, 116)),
+_0x0473 = 5,
+})
+end)
+end
+_0x0429:_0x04fc(1)
+_0x003c:_0x0471({
+_0x042b = string.char(97, 109, 105, 116, 111, 111, 102, 97, 115, 116),
+_0x0472 = string.char(76, 111, 97, 100, 101, 100, 32, 45, 32, 99, 111, 109, 98, 97, 116, 32, 114, 111, 117, 116, 101, 58, 32) .. _0x00c1,
+_0x0473 = (3 + 3),
 })
